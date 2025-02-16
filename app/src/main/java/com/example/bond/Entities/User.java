@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 public class User {
     //required fields
     @PrimaryKey(autoGenerate = true)
-    private int ID;
+    private int userID;
     @NonNull
     private String userName;
     @NonNull
@@ -42,14 +42,14 @@ public class User {
     @Nullable
     private String interests;
 
-    public User(int ID, @NonNull String userName, @NonNull String emailAddress,
+    public User(int userID, @NonNull String userName, @NonNull String emailAddress,
                 @NonNull String passwordHash, @Nullable String profilePictureURL,
                 @Nullable String birthday, @Nullable String favoriteColor,
                 @Nullable String allergies, @Nullable String dietaryRestrictions,
                 @Nullable String favoriteFood, @Nullable String hobbies,
                 @Nullable String currentJob, @Nullable String petName, @Nullable String partnerName,
                 @Nullable String interests) {
-        this.ID = ID;
+        this.userID = userID;
         this.userName = userName;
         this.emailAddress = emailAddress;
         this.passwordHash = passwordHash;
@@ -66,12 +66,12 @@ public class User {
         this.interests = interests;
     }
 
-    public int getID() {
-        return ID;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     @NonNull
