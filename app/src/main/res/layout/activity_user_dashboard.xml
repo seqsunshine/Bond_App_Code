@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/user_dashboard"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F3EF"
+    tools:context=".UI.UserDashboard">
+
+    <ImageView
+        android:id="@+id/dashboard_logo"
+        android:layout_width="295dp"
+        android:layout_height="119dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.008"
+        app:srcCompat="@drawable/bond_v2_transparent" />
+
+    <ImageView
+        android:id="@+id/profile_picture"
+        android:layout_width="84dp"
+        android:layout_height="81dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.131"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.155"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/dashboard_users_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="&quot;Users' Name&quot;"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.202" />
+
+    <Button
+        android:id="@+id/dashboard_edit_profile_button"
+        android:layout_width="260dp"
+        android:layout_height="60dp"
+        android:backgroundTint="#222222"
+        android:fontFamily="@font/bright_demo"
+        android:text="Edit Profile and Preferences"
+        android:textColor="#F5F3EF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.332" />
+
+    <Button
+        android:id="@+id/dashboard_add_friends_button"
+        android:layout_width="260dp"
+        android:layout_height="60dp"
+        android:backgroundTint="#222222"
+        android:fontFamily="@font/bright_demo"
+        android:text="Add Friends"
+        android:textColor="#F5F3EF"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.584" />
+
+    <Button
+        android:id="@+id/dashboard_create_friend_button"
+        android:layout_width="260dp"
+        android:layout_height="60dp"
+        android:backgroundTint="#222222"
+        android:fontFamily="@font/bright_demo"
+        android:text="Create Friend Page"
+        android:textColor="#F5F3EF"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.703" />
+
+    <Button
+        android:id="@+id/dashboard_my_events_button"
+        android:layout_width="260dp"
+        android:layout_height="60dp"
+        android:backgroundTint="#222222"
+        android:fontFamily="@font/bright_demo"
+        android:text="My Events"
+        android:textColor="#F5F3EF"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.821" />
+
+    <Button
+        android:id="@+id/dashboard_my_friends_button"
+        android:layout_width="260dp"
+        android:layout_height="60dp"
+        android:backgroundTint="#222222"
+        android:fontFamily="@font/bright_demo"
+        android:text="My Friends"
+        android:textColor="#F5F3EF"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.457" />
+
+    <Button
+        android:id="@+id/dashboard_create_event_button"
+        android:layout_width="260dp"
+        android:layout_height="60dp"
+        android:backgroundTint="#222222"
+        android:fontFamily="@font/bright_demo"
+        android:text="Create Event Page"
+        android:textColor="#F5F3EF"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.941" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,48 @@
         android:theme="@style/Theme.Bond"
         tools:targetApi="31">
         <activity
+            android:name=".UI.AddFriend"
+            android:exported="false" />
+        <activity
+            android:name=".UI.NewDate"
+            android:exported="false" />
+        <activity
+            android:name=".UI.NewPreference"
+            android:exported="false" />
+        <activity
+            android:name=".UI.CreateEvent"
+            android:exported="false" />
+        <activity
+            android:name=".UI.CreateFriend"
+            android:exported="false" />
+        <activity
+            android:name=".UI.EditProfile"
+            android:exported="false" />
+        <activity
+            android:name=".UI.EventDetails"
+            android:exported="false" />
+        <activity
+            android:name=".UI.FriendDetails"
+            android:exported="false" />
+        <activity
+            android:name=".UI.EventPage"
+            android:exported="false" />
+        <activity
+            android:name=".UI.FriendList"
+            android:exported="false" />
+        <activity
+            android:name=".UI.UserDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".UI.CreateAccountPage"
+            android:exported="false" />
+        <activity
+            android:name=".UI.LoginPage"
+            android:exported="false" />
+        <activity
+            android:name=".UI.HomeScreen"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
