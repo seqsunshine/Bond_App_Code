@@ -7,20 +7,62 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bond.Adapters.FriendAdapter;
+import com.example.bond.DAO.FriendDAO;
+import com.example.bond.Database.BondAppDatabase;
+import com.example.bond.Entities.Friend;
 import com.example.bond.R;
 
+import java.util.List;
+
 public class FriendList extends AppCompatActivity {
+
+    private BondAppDatabase db;
+    private FriendDAO friendDAO;
+    private List<Friend> friendList;
+    private RecyclerView recyclerView;
+    private FriendAdapter friendAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_friend_list);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.home_screen), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.friend_list), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        //initialize recycler view
+        recyclerView = findViewById(R.id.my_friends_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //get database instance
+        db = BondAppDatabase.getDatabase(getApplicationContext());
+        friendDAO = db.friendDAO();
+
+        //load friends
+        loadFriends();
+    }
+
+    private void loadFriends() {
+        BondAppDatabase.databaseWriteExecutor.execute(new Runnable(){
+            @Override
+            public void run() {
+                friendList = friendDAO.getAllFriends();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        friendAdapter = new FriendAdapter(FriendList.this, friendList);
+                        recyclerView.setAdapter(friendAdapter);
+                    }
+                });
+            }
         });
     }
 }

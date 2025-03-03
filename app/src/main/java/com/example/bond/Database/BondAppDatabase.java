@@ -19,6 +19,9 @@ import com.example.bond.Entities.OccasionFriendCrossRef;
 import com.example.bond.Entities.User;
 import com.example.bond.Entities.UserCustomField;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 @Database(entities = {User.class, Friend.class, Occasion.class, UserCustomField.class,
         FriendCustomField.class, OccasionFriendCrossRef.class}, version = 1, exportSchema = false)
 public abstract class BondAppDatabase extends RoomDatabase{
@@ -30,6 +33,10 @@ public abstract class BondAppDatabase extends RoomDatabase{
     public abstract OccasionFriendCrossRefDAO occasionFriendCrossRefDAO();
 
     private static volatile BondAppDatabase INSTANCE;
+
+    private static final int NUMBER_OF_THREADS = 4;
+    public static final ExecutorService databaseWriteExecutor =
+            Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public static BondAppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {

@@ -22,6 +22,8 @@ public class User {
     @Nullable
     private String profilePictureURL;
     @Nullable
+    private String name;
+    @Nullable
     private String birthday;
     @Nullable
     private String favoriteColor;
@@ -43,7 +45,7 @@ public class User {
     private String interests;
 
     public User(int userID, @NonNull String userName, @NonNull String emailAddress,
-                @NonNull String passwordHash, @Nullable String profilePictureURL,
+                @NonNull String passwordHash, @Nullable String profilePictureURL, @Nullable String name,
                 @Nullable String birthday, @Nullable String favoriteColor,
                 @Nullable String allergies, @Nullable String dietaryRestrictions,
                 @Nullable String favoriteFood, @Nullable String hobbies,
@@ -54,6 +56,7 @@ public class User {
         this.emailAddress = emailAddress;
         this.passwordHash = passwordHash;
         this.profilePictureURL = profilePictureURL;
+        this.name = name;
         this.birthday = birthday;
         this.favoriteColor = favoriteColor;
         this.allergies = allergies;
@@ -65,7 +68,6 @@ public class User {
         this.partnerName = partnerName;
         this.interests = interests;
     }
-
     public int getUserID() {
         return userID;
     }
@@ -108,6 +110,15 @@ public class User {
 
     public void setProfilePictureURL(@Nullable String profilePictureURL) {
         this.profilePictureURL = profilePictureURL;
+    }
+
+    @Nullable
+    public String getName() {
+        return name;
+    }
+
+    public void setName(@Nullable String name){
+        this.name = name;
     }
 
     @Nullable

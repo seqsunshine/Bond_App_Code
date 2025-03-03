@@ -12,7 +12,10 @@ public class Friend {
     @PrimaryKey(autoGenerate = true)
     private int friendID;
     @NonNull
-    private String userName;
+    private String friendUserName;
+
+    @NonNull
+    private String friendName;
 
     //optional fields
     @Nullable
@@ -41,14 +44,15 @@ public class Friend {
     //indicates whether friend is created or added
     private boolean hasAccount;
 
-    public Friend(int friendID, @NonNull String userName, @Nullable String profilePictureURL,
+    public Friend(int friendID, @NonNull String friendUserName, @NonNull String friendName, @Nullable String profilePictureURL,
                   @Nullable String birthday, @Nullable String favoriteColor,
                   @Nullable String allergies, @Nullable String dietaryRestrictions,
                   @Nullable String favoriteFood, @Nullable String hobbies,
                   @Nullable String currentJob, @Nullable String petName,
                   @Nullable String partnerName, @Nullable String interests, boolean hasAccount) {
         this.friendID = friendID;
-        this.userName = userName;
+        this.friendUserName = friendUserName;
+        this.friendName = friendName;
         this.profilePictureURL = profilePictureURL;
         this.birthday = birthday;
         this.favoriteColor = favoriteColor;
@@ -72,12 +76,21 @@ public class Friend {
     }
 
     @NonNull
-    public String getUserName() {
-        return userName;
+    public String getFriendUserName() {
+        return friendUserName;
     }
 
-    public void setUserName(@NonNull String userName) {
-        this.userName = userName;
+    public void setFriendUserName(@NonNull String friendUserName) {
+        this.friendUserName = friendUserName;
+    }
+
+    @NonNull
+    public String getFriendName(){
+        return friendName;
+    }
+
+    public void setFriendName(@NonNull String friendName) {
+        this.friendName = friendName;
     }
 
     @Nullable
