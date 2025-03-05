@@ -37,6 +37,11 @@ public class FriendList extends AppCompatActivity {
             return insets;
         });
 
+        //set up backwards navigation
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         //initialize recycler view
         recyclerView = findViewById(R.id.my_friends_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

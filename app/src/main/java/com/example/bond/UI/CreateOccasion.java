@@ -64,6 +64,11 @@ public class CreateOccasion extends AppCompatActivity {
             return insets;
         });
 
+        //set up backwards navigation
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         //occasion detail fields
         occasionTitleEditText = findViewById(R.id.occasion_title_edit_text);
         occasionDateEditText = findViewById(R.id.occasion_date_edit_text);

@@ -37,6 +37,12 @@ public class FriendDetails extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        //set up backwards navigation
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         //connect xml components to file
         friendDetailsRecycler = findViewById(R.id.friend_details_recycler);
         friendDetailsProfilePicture = findViewById(R.id.friend_details_profile_picture);

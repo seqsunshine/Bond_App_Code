@@ -46,6 +46,16 @@ public class CreateFriend extends AppCompatActivity {
             return insets;
         });
 
+        //set up backwards navigation
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        //set up custom backwards navigation from NewDate and NewPreference
+        Intent intent = new Intent(CreateFriend.this, NewDate.class);
+        intent.putExtra("origin", "createFriend");
+        startActivity(intent);
+
         //connect xml components to file
         addFriendDateButton = findViewById(R.id.add_friend_date_button);
         addFriendPreferenceButton = findViewById(R.id.add_friend_preference_button);

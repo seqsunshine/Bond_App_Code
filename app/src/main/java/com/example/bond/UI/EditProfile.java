@@ -46,6 +46,16 @@ public class EditProfile extends AppCompatActivity {
             return insets;
         });
 
+        //set up backwards navigation
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        //set up custom backwards navigation from NewDate and NewPreference
+        Intent intent = new Intent(EditProfile.this, NewDate.class);
+        intent.putExtra("origin", "editProfile");
+        startActivity(intent);
+
         //connect xml components to file
         editProfileLogo = findViewById(R.id.edit_profile_logo);
         profilePicture = findViewById(R.id.edit_page_profile_picture);

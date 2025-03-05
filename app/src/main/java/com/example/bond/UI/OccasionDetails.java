@@ -55,6 +55,11 @@ public class OccasionDetails extends AppCompatActivity {
             return insets;
         });
 
+        //set up backwards navigation
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         //edit text
         occasionDetailsTitleEditText = findViewById(R.id.occasion_details_title_edit_text);
         occasionDetailsDateEditText = findViewById(R.id.occasion_details_date_edit_text);

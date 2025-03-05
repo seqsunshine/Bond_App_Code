@@ -34,6 +34,11 @@ public class OccasionPage extends AppCompatActivity {
             return insets;
         });
 
+        //set up backwards navigation
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         //initialize recycler
         occasionsRecycler = findViewById(R.id.my_occasion_recycler);
         occasionsRecycler.setLayoutManager(new LinearLayoutManager(this));

@@ -1,6 +1,7 @@
 package com.example.bond.UI;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,5 +23,21 @@ public class NewPreference extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        //set up backwards navigation
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    //add custom backwards navigation to EditProfile or CreateFriend
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+            String origin = getIntent().getStringExtra("origin");
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

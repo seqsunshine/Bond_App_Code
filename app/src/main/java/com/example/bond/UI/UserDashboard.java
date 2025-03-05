@@ -38,6 +38,11 @@ public class UserDashboard extends AppCompatActivity {
             return insets;
         });
 
+        //set up backwards navigation
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         //connect xml components to file
         dashboardLogo = findViewById(R.id.dashboard_logo);
         profilePicture = findViewById(R.id.profile_picture);

@@ -38,6 +38,11 @@ public class CreateAccountPage extends AppCompatActivity {
             return insets;
         });
 
+        //set up backwards navigation
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         //connects xml components to file
         usernameEditText = findViewById(R.id.create_username_edit_text);
         emailEditText = findViewById(R.id.create_email_edit_text);

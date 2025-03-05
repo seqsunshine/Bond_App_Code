@@ -45,6 +45,11 @@ public class AddFriend extends AppCompatActivity {
             return insets;
         });
 
+        //set up backwards navigation
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         searchForFriendsText = findViewById(R.id.search_for_friends_text);
         friendsSearchText = findViewById(R.id.friends_search_text);
         friendsSearchEditText = findViewById(R.id.friends_search_edit_text);
