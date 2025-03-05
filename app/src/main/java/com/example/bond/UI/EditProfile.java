@@ -51,10 +51,11 @@ public class EditProfile extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        //set up custom backwards navigation from NewDate and NewPreference
-        Intent intent = new Intent(EditProfile.this, NewDate.class);
-        intent.putExtra("origin", "editProfile");
-        startActivity(intent);
+        //commented out for now.. need to work on the logic for this navigation
+//        //set up custom backwards navigation from NewDate and NewPreference
+//        Intent intent = new Intent(EditProfile.this, NewDate.class);
+//        intent.putExtra("origin", "editProfile");
+//        startActivity(intent);
 
         //connect xml components to file
         editProfileLogo = findViewById(R.id.edit_profile_logo);

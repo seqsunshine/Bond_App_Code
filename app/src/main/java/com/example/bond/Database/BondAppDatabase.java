@@ -2,9 +2,11 @@ package com.example.bond.Database;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.bond.DAO.FriendCustomFieldDAO;
 import com.example.bond.DAO.FriendDAO;
@@ -42,14 +44,46 @@ public abstract class BondAppDatabase extends RoomDatabase{
 
     public static BondAppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
-            synchronized (BondAppDatabase.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            BondAppDatabase.class, "bond_app_database")
-                            .fallbackToDestructiveMigration()
-                            .build();
-                }
+            synchronized (BondAppDatabase.class){
+                INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                        BondAppDatabase.class, "bond_app_database")
+                        .addCallback(new RoomDatabase.Callback(){
+                            @Override
+                            public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                                super.onCreate(db);
+                                databaseWriteExecutor.execute(() ->{
+                                    User dummyUser = new User(
+                                            0,
+                                            "dummyUser",
+                                            "dummy@example.com",
+                                            "hashed_password",
+                                            null,
+                                            "Dummy User",
+                                            null,
+                                            null,
+                                            null,
+                                            null,
+                                            null,
+                                            null,
+                                            null,
+                                            null,
+                                            null,
+                                            null);
+                                    getDatabase(context).userDAO().insertUser(dummyUser);
+                                });
+                            }
+                        })
+                        .build();
             }
+            //commented out. this was the original piece of code, changed to add dummy user
+//            synchronized (BondAppDatabase.class) {
+//                if (INSTANCE == null) {
+//                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+//                            BondAppDatabase.class, "bond_app_database")
+//                            .fallbackToDestructiveMigration()
+//                            .build();
+//                }
+//            }
         }
         return INSTANCE;
     }

@@ -16,9 +16,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.bond.R;
 
 public class UserDashboard extends AppCompatActivity {
-
-    private ImageView dashboardLogo;
-    private ImageView profilePicture;
     private TextView dashboardUsersName;
     private Button editProfileButton;
     private Button addFriendsButton;
@@ -44,8 +41,6 @@ public class UserDashboard extends AppCompatActivity {
         }
 
         //connect xml components to file
-        dashboardLogo = findViewById(R.id.dashboard_logo);
-        profilePicture = findViewById(R.id.profile_picture);
         dashboardUsersName = findViewById(R.id.dashboard_users_name);
         editProfileButton = findViewById(R.id.dashboard_edit_profile_button);
         addFriendsButton = findViewById(R.id.dashboard_add_friends_button);

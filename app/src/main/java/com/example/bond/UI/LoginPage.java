@@ -1,7 +1,9 @@
 package com.example.bond.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,9 +69,12 @@ public class LoginPage extends AppCompatActivity {
         //THIS IS INCOMPLETE
 
         // for now, a toast is added as a place holder
+        Toast.makeText(LoginPage.this, "Login successful!", Toast.LENGTH_SHORT).show();
 
-        Toast.makeText(LoginPage.this, "Username: " + username + "\nPassword: " +
-                password, Toast.LENGTH_SHORT).show();
+        //navigate to user dashboard
+        Intent intent = new Intent(LoginPage.this, UserDashboard.class);
+        startActivity(intent);
+        finish();
     }
 
 }
