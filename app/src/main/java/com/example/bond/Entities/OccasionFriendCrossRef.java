@@ -5,7 +5,7 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 
 @Entity(tableName = "occasion_friend_cross_ref",
-        primaryKeys = {"occasionID", "friend_ID"},
+        primaryKeys = {"occasionID", "friendID"},
         foreignKeys = {
                 @ForeignKey(entity = Occasion.class, parentColumns = "occasionID", childColumns = "occasionID",
                 onDelete = ForeignKey.CASCADE),

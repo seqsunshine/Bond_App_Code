@@ -15,6 +15,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bond.Adapters.FriendPreferenceAdapter;
+import com.example.bond.Models.FriendPreference;
 import com.example.bond.R;
 
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ public class CreateFriend extends AppCompatActivity {
     private ImageView createFriendLogo;
     private TextView friendPreferencesText;
 
-    private List<String> friendPreferenceList;
+    private List<FriendPreference> friendPreferenceList;
     private FriendPreferenceAdapter friendPreferenceAdapter;
 
     @Override

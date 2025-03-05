@@ -15,100 +15,98 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bond.Adapters.EventFriendAdapter;
-import com.example.bond.Adapters.EventPreferenceAdapter;
+import com.example.bond.Adapters.OccasionFriendAdapter;
+import com.example.bond.Adapters.OccasionPreferenceAdapter;
 import com.example.bond.Entities.Friend;
 import com.example.bond.Entities.Occasion;
 import com.example.bond.Models.Preference;
 import com.example.bond.R;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateEvent extends AppCompatActivity {
+public class CreateOccasion extends AppCompatActivity {
     //event details
-    private EditText eventTitleEditText;
-    private EditText eventDateEditText;
-    private EditText eventLocationEditText;
-    private EditText eventDescriptionEditText;
+    private EditText occasionTitleEditText;
+    private EditText occasionDateEditText;
+    private EditText occasionLocationEditText;
+    private EditText occasionDescriptionEditText;
 
     //search fields
-    private EditText eventSearchFriendsEditText;
-    private EditText eventSearchPreferencesEditText;
+    private EditText occasionSearchFriendsEditText;
+    private EditText occasionSearchPreferencesEditText;
 
     //recycler views
-    private RecyclerView eventSelectFriendsRecycler;
-    private RecyclerView eventSelectPreferencesRecycler;
+    private RecyclerView occasionSelectFriendsRecycler;
+    private RecyclerView occasionSelectPreferencesRecycler;
 
     //button
-    private Button eventCreateEventButton;
+    private Button occasionCreateOccasionButton;
 
     //friend data related
     private List<Friend> friendList;
     private List<Friend> filteredFriendList;
-    private EventFriendAdapter eventFriendAdapter;
+    private OccasionFriendAdapter occasionFriendAdapter;
 
     //preference data related
     private List<Preference> preferenceList;
     private List<Preference> filteredPreferenceList;
-    private EventPreferenceAdapter eventPreferenceAdapter;
+    private OccasionPreferenceAdapter occasionPreferenceAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_create_event);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.create_event), (v, insets) -> {
+        setContentView(R.layout.activity_create_occasion);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.create_occasion), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        //event detail fields
-        eventTitleEditText = findViewById(R.id.event_title_edit_text);
-        eventDateEditText = findViewById(R.id.event_date_edit_text);
-        eventLocationEditText = findViewById(R.id.event_location_edit_text);
-        eventDescriptionEditText = findViewById(R.id.event_description_edit_text);
+        //occasion detail fields
+        occasionTitleEditText = findViewById(R.id.occasion_title_edit_text);
+        occasionDateEditText = findViewById(R.id.occasion_date_edit_text);
+        occasionLocationEditText = findViewById(R.id.occasion_location_edit_text);
+        occasionDescriptionEditText = findViewById(R.id.occasion_description_edit_text);
 
         //search fields
-        eventSearchFriendsEditText = findViewById(R.id.event_search_friends_edit_text);
-        eventSearchPreferencesEditText = findViewById(R.id.event_search_preferences_edit_text);
+        occasionSearchFriendsEditText = findViewById(R.id.occasion_search_friends_edit_text);
+        occasionSearchPreferencesEditText = findViewById(R.id.occasion_search_preferences_edit_text);
 
         //recyclers
-        eventSelectFriendsRecycler = findViewById(R.id.event_select_friends_recycler);
-        eventSelectPreferencesRecycler = findViewById(R.id.event_select_preferences_recycler);
+        occasionSelectFriendsRecycler = findViewById(R.id.occasion_select_friends_recycler);
+        occasionSelectPreferencesRecycler = findViewById(R.id.occasion_select_preferences_recycler);
 
         //button
-        eventCreateEventButton = findViewById(R.id.event_create_event_button);
+        occasionCreateOccasionButton = findViewById(R.id.occasion_create_occasion_button);
 
         //set up recycler views
         LinearLayoutManager friendsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager. HORIZONTAL, false);
-        eventSelectFriendsRecycler.setLayoutManager(friendsLayoutManager);
+        occasionSelectFriendsRecycler.setLayoutManager(friendsLayoutManager);
 
         LinearLayoutManager preferencesLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        eventSelectPreferencesRecycler.setLayoutManager(preferencesLayoutManager);
+        occasionSelectPreferencesRecycler.setLayoutManager(preferencesLayoutManager);
 
         //initialize friend list
         friendList = new ArrayList<>();
         filteredFriendList = new ArrayList<>(friendList);
         //need to add info to filter in data. NOT DONE
 
-        //initialize event friend attached to recycler
-        eventFriendAdapter = new EventFriendAdapter(this, filteredFriendList);
-        eventSelectFriendsRecycler.setAdapter(eventFriendAdapter);
+        //initialize occasion friend attached to recycler
+        occasionFriendAdapter = new OccasionFriendAdapter(this, filteredFriendList);
+        occasionSelectFriendsRecycler.setAdapter(occasionFriendAdapter);
 
         //initialize preference list
         preferenceList = new ArrayList<>();
         filteredPreferenceList = new ArrayList<>(preferenceList);
         //need to add info to filter in data. NOT DONE
 
-        //initialize event preference attached to recycler
-        eventPreferenceAdapter = new EventPreferenceAdapter(this, filteredPreferenceList);
+        //initialize occasion preference attached to recycler
+        occasionPreferenceAdapter = new OccasionPreferenceAdapter(this, filteredPreferenceList);
 
         //set up friend search
-        eventSearchFriendsEditText.addTextChangedListener(new TextWatcher() {
+        occasionSearchFriendsEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -126,7 +124,7 @@ public class CreateEvent extends AppCompatActivity {
         });
 
         //set up preferences search
-        eventSearchPreferencesEditText.addTextChangedListener(new TextWatcher() {
+        occasionSearchPreferencesEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -143,11 +141,11 @@ public class CreateEvent extends AppCompatActivity {
             }
         });
 
-        //activate create event button
-        eventCreateEventButton.setOnClickListener(new View.OnClickListener(){
+        //activate create occasion button
+        occasionCreateOccasionButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                createEvent();
+                createOccasion();
             }
         });
     }
@@ -164,7 +162,7 @@ public class CreateEvent extends AppCompatActivity {
                 }
             }
         }
-        eventFriendAdapter.notifyDataSetChanged();
+        occasionFriendAdapter.notifyDataSetChanged();
     }
 
     //filters preferences
@@ -182,11 +180,11 @@ public class CreateEvent extends AppCompatActivity {
         }
     }
 
-    private void createEvent(){
-        String title = eventTitleEditText.getText().toString().trim();
-        String date = eventDateEditText.getText().toString().trim();
-        String location = eventLocationEditText.getText().toString().trim();
-        String description = eventDescriptionEditText.getText().toString().trim();
+    private void createOccasion(){
+        String title = occasionTitleEditText.getText().toString().trim();
+        String date = occasionDateEditText.getText().toString().trim();
+        String location = occasionLocationEditText.getText().toString().trim();
+        String description = occasionDescriptionEditText.getText().toString().trim();
 
         if(title.isEmpty() || date.isEmpty() || location.isEmpty() || description.isEmpty()){
             //make a toast showing error message here
@@ -195,9 +193,8 @@ public class CreateEvent extends AppCompatActivity {
             return;
         }
 
-        Occasion newOccasion = new Occasion(0, title, date, location, description, 0);
-        //make sure to add logic to save the event to database here!!
-        //also add a toast to ensure that a successful event was created
-        //ALSO noted previously, but you need to go through and make all "event" things occasions!!
+        Occasion newOccasion = new Occasion(0, title, date, location, description, null, 0);
+        //make sure to add logic to save the occasion to database here!!
+        //also add a toast to ensure that a successful occasion was created
     }
 }

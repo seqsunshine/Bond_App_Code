@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "occasion",
         foreignKeys = @ForeignKey(
                 entity = User.class,
-                parentColumns = "occasionID",
+                parentColumns = "userID",
                 childColumns = "userID",
                 onDelete = ForeignKey.CASCADE
         ),
@@ -24,14 +24,17 @@ public class Occasion {
     private String description;
     private String occasionDate;
     private String occasionLocation;
+    private String dateCreated;
+
     private int userID;
 
-    public Occasion(int occasionID, @NonNull String occasionTitle, String description, String occasionDate, String occasionLocation, int userID) {
+    public Occasion(int occasionID, @NonNull String occasionTitle, String description, String occasionDate, String occasionLocation, String dateCreated, int userID) {
         this.occasionID = occasionID;
         this.occasionTitle = occasionTitle;
         this.description = description;
         this.occasionDate = occasionDate;
         this.occasionLocation = occasionLocation;
+        this.dateCreated = dateCreated;
         this.userID = userID;
     }
 
@@ -74,6 +77,14 @@ public class Occasion {
 
     public void setOccasionLocation(String occasionLocation) {
         this.occasionLocation = occasionLocation;
+    }
+
+    public String getDateCreated(){
+        return dateCreated;
+    }
+
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public int getUserID() {

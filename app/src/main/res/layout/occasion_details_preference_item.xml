@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/event_preference_title_text_view"
+        android:id="@+id/occasion_details_preference_title_text_view"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Preference Name"
@@ -15,13 +15,13 @@
         app:layout_constraintLeft_toLeftOf="parent"/>
 
     <TextView
-        android:id="@+id/event_preference_description_text_view"
+        android:id="@+id/occasion_details_preference_description_text_view"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Preference Description"
         android:textSize="18sp"
         android:fontFamily="@font/bright_demo"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/event_preference_title_text_view"/>
+        app:layout_constraintLeft_toRightOf="@id/occasion_details_preference_title_text_view"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

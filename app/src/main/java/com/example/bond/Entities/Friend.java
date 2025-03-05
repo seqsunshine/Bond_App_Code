@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "friend", indices = {@Index(value = "userName")})
+@Entity(tableName = "friend", indices = {@Index(value = "friendUserName")})
 public class Friend {
     //required fields
     @PrimaryKey(autoGenerate = true)

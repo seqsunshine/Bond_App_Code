@@ -14,25 +14,25 @@ import com.example.bond.R;
 
 import java.util.List;
 
-public class EventPreferenceAdapter extends RecyclerView.Adapter<EventPreferenceAdapter.EventPreferenceViewHolder> {
+public class OccasionPreferenceAdapter extends RecyclerView.Adapter<OccasionPreferenceAdapter.OccasionPreferenceViewHolder> {
 
     private Context context;
     private List<Preference> preferenceList;
 
-    public EventPreferenceAdapter(Context context, List<Preference> preferenceList) {
+    public OccasionPreferenceAdapter(Context context, List<Preference> preferenceList) {
         this.context = context;
         this.preferenceList = preferenceList;
     }
 
     @NonNull
     @Override
-    public EventPreferenceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.event_preference_item, parent, false);
-        return new EventPreferenceViewHolder(view);
+    public OccasionPreferenceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.occasion_preference_item, parent, false);
+        return new OccasionPreferenceViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EventPreferenceViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OccasionPreferenceViewHolder holder, int position) {
         Preference currentPreference = preferenceList.get(position);
         holder.preferenceTitleTextView.setText(currentPreference.getName());
         holder.preferenceDescriptionTextView.setText(currentPreference.getDescription());
@@ -43,14 +43,14 @@ public class EventPreferenceAdapter extends RecyclerView.Adapter<EventPreference
         return preferenceList != null ? preferenceList.size() : 0;
     }
 
-    public static class EventPreferenceViewHolder extends RecyclerView.ViewHolder {
+    public static class OccasionPreferenceViewHolder extends RecyclerView.ViewHolder {
         TextView preferenceTitleTextView;
         TextView preferenceDescriptionTextView;
 
-        public EventPreferenceViewHolder(@NonNull View itemView) {
+        public OccasionPreferenceViewHolder(@NonNull View itemView) {
             super(itemView);
-            preferenceTitleTextView = itemView.findViewById(R.id.event_preference_title_text_view);
-            preferenceDescriptionTextView = itemView.findViewById(R.id.event_preference_description_text_view);
+            preferenceTitleTextView = itemView.findViewById(R.id.occasion_preference_title_text_view);
+            preferenceDescriptionTextView = itemView.findViewById(R.id.occasion_preference_description_text_view);
         }
     }
 

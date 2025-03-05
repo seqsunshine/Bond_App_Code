@@ -15,6 +15,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bond.Adapters.PreferenceAdapter;
+import com.example.bond.Models.Preference;
 import com.example.bond.R;
 
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ public class EditProfile extends AppCompatActivity {
     private Button changePhotoButton;
     private TextView myPreferencesText;
 
-    private List<String> preferenceList;
+    private List<Preference> preferenceList;
     private PreferenceAdapter preferenceAdapter;
 
     @Override
@@ -96,8 +98,6 @@ public class EditProfile extends AppCompatActivity {
     private void loadUserPreferences() {
         //need to create logic for this.. NOT FINISHED YET temp data for now
         preferenceList.clear();
-        preferenceList.add("No dairy");
-        preferenceList.add("Gluten free");
         preferenceAdapter.notifyDataSetChanged();
     }
 }

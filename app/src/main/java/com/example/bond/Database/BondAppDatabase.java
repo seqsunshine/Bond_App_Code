@@ -18,12 +18,14 @@ import com.example.bond.Entities.Occasion;
 import com.example.bond.Entities.OccasionFriendCrossRef;
 import com.example.bond.Entities.User;
 import com.example.bond.Entities.UserCustomField;
+import com.example.bond.Relations.FriendWithCustomField;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {User.class, Friend.class, Occasion.class, UserCustomField.class,
-        FriendCustomField.class, OccasionFriendCrossRef.class}, version = 1, exportSchema = false)
+        FriendCustomField.class, OccasionFriendCrossRef.class},
+        views ={FriendWithCustomField.class}, version = 1, exportSchema = false)
 public abstract class BondAppDatabase extends RoomDatabase{
     public abstract UserDAO userDAO();
     public abstract FriendDAO friendDAO();

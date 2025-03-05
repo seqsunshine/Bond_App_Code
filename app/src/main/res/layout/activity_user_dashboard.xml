@@ -92,12 +92,12 @@
         app:layout_constraintVertical_bias="0.703" />
 
     <Button
-        android:id="@+id/dashboard_my_events_button"
+        android:id="@+id/dashboard_my_occasions_button"
         android:layout_width="260dp"
         android:layout_height="60dp"
         android:backgroundTint="#222222"
         android:fontFamily="@font/bright_demo"
-        android:text="My Events"
+        android:text="My Occasions"
         android:textColor="#F5F3EF"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -124,12 +124,12 @@
         app:layout_constraintVertical_bias="0.457" />
 
     <Button
-        android:id="@+id/dashboard_create_event_button"
+        android:id="@+id/dashboard_create_occasion_button"
         android:layout_width="260dp"
         android:layout_height="60dp"
         android:backgroundTint="#222222"
         android:fontFamily="@font/bright_demo"
-        android:text="Create Event Page"
+        android:text="Create Occasion"
         android:textColor="#F5F3EF"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -2,18 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/create_event"
+    android:id="@+id/create_occasion"
     android:background="#F5F3EF"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.CreateEvent">
+    tools:context=".UI.CreateOccasion">
 
     <TextView
-        android:id="@+id/event_date_text"
+        android:id="@+id/occasion_date_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bright_demo"
-        android:text="event date:"
+        android:text="Date:"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="0.24" />
 
     <EditText
-        android:id="@+id/event_date_edit_text"
+        android:id="@+id/occasion_date_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -36,11 +36,11 @@
         app:layout_constraintVertical_bias="0.233" />
 
     <TextView
-        android:id="@+id/event_location_text"
+        android:id="@+id/occasion_location_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bright_demo"
-        android:text="event location:"
+        android:text="Location:"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +50,7 @@
         app:layout_constraintVertical_bias="0.367" />
 
     <EditText
-        android:id="@+id/event_title_edit_text"
+        android:id="@+id/occasion_title_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -63,7 +63,7 @@
         app:layout_constraintVertical_bias="0.167" />
 
     <EditText
-        android:id="@+id/event_location_edit_text"
+        android:id="@+id/occasion_location_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -76,7 +76,7 @@
         app:layout_constraintVertical_bias="0.364" />
 
     <EditText
-        android:id="@+id/event_description_edit_text"
+        android:id="@+id/occasion_description_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -89,11 +89,11 @@
         app:layout_constraintVertical_bias="0.298" />
 
     <TextView
-        android:id="@+id/event_title_text"
+        android:id="@+id/occasion_title_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bright_demo"
-        android:text="event title:"
+        android:text="Title:"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -103,11 +103,11 @@
         app:layout_constraintVertical_bias="0.175" />
 
     <TextView
-        android:id="@+id/event_description_text"
+        android:id="@+id/occasion_description_text"
         android:layout_width="102dp"
         android:layout_height="19dp"
         android:fontFamily="@font/bright_demo"
-        android:text="event description:"
+        android:text="Description:"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -117,7 +117,7 @@
         app:layout_constraintVertical_bias="0.304" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/event_select_friends_recycler"
+        android:id="@+id/occasion_select_friends_recycler"
         android:layout_width="324dp"
         android:layout_height="97dp"
         android:backgroundTint="#222222"
@@ -131,7 +131,7 @@
         app:layout_constraintVertical_bias="0.604" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/event_select_preferences_recycler"
+        android:id="@+id/occasion_select_preferences_recycler"
         android:layout_width="320dp"
         android:layout_height="101dp"
         android:backgroundTint="#222222"
@@ -145,7 +145,7 @@
         app:layout_constraintVertical_bias="0.88" />
 
     <EditText
-        android:id="@+id/event_search_friends_edit_text"
+        android:id="@+id/occasion_search_friends_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -158,7 +158,7 @@
         app:layout_constraintVertical_bias="0.492" />
 
     <EditText
-        android:id="@+id/event_search_preferences_edit_text"
+        android:id="@+id/occasion_search_preferences_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -171,7 +171,7 @@
         app:layout_constraintVertical_bias="0.743" />
 
     <TextView
-        android:id="@+id/event_search_friends_text"
+        android:id="@+id/occasion_search_friends_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bright_demo"
@@ -185,7 +185,7 @@
         app:layout_constraintVertical_bias="0.499" />
 
     <TextView
-        android:id="@+id/event_search_preferences_text"
+        android:id="@+id/occasion_search_preferences_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bright_demo"
@@ -199,12 +199,12 @@
         app:layout_constraintVertical_bias="0.748" />
 
     <Button
-        android:id="@+id/event_create_event_button"
+        android:id="@+id/occasion_create_occasion_button"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:backgroundTint="#222222"
         android:fontFamily="@font/bright_demo"
-        android:text="Create Event"
+        android:text="Create Occasion"
         android:textColor="#F5F3EF"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -215,11 +215,11 @@
         app:layout_constraintVertical_bias="0.976" />
 
     <TextView
-        android:id="@+id/create_new_event_text"
+        android:id="@+id/create_new_occasion_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bright_demo"
-        android:text="Create New Event:"
+        android:text="Create New Occasion:"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -228,7 +228,7 @@
         app:layout_constraintVertical_bias="0.113" />
 
     <TextView
-        android:id="@+id/event_select_friends_text"
+        android:id="@+id/occasion_select_friends_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bright_demo"
@@ -242,7 +242,7 @@
         app:layout_constraintVertical_bias="0.439" />
 
     <TextView
-        android:id="@+id/event_select_preferences_text"
+        android:id="@+id/occasion_select_preferences_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bright_demo"
@@ -255,7 +255,7 @@
         app:layout_constraintVertical_bias="0.684" />
 
     <ImageView
-        android:id="@+id/create_event_logo"
+        android:id="@+id/create_occasion_logo"
         android:layout_width="295dp"
         android:layout_height="115dp"
         app:layout_constraintBottom_toBottomOf="parent"

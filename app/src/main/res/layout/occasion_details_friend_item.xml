@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/event_friend_name_text_view"
+        android:id="@+id/occasion_details_friend_name_text_view"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Friend Name"

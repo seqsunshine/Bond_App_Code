@@ -22,7 +22,7 @@
             android:name=".UI.NewPreference"
             android:exported="false" />
         <activity
-            android:name=".UI.CreateEvent"
+            android:name=".UI.CreateOccasion"
             android:exported="false" />
         <activity
             android:name=".UI.CreateFriend"
@@ -31,13 +31,13 @@
             android:name=".UI.EditProfile"
             android:exported="false" />
         <activity
-            android:name=".UI.EventDetails"
+            android:name=".UI.OccasionDetails"
             android:exported="false" />
         <activity
             android:name=".UI.FriendDetails"
             android:exported="false" />
         <activity
-            android:name=".UI.EventPage"
+            android:name=".UI.OccasionPage"
             android:exported="false" />
         <activity
             android:name=".UI.FriendList"
@@ -53,9 +53,6 @@
             android:exported="false" />
         <activity
             android:name=".UI.HomeScreen"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

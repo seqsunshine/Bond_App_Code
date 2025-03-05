@@ -23,9 +23,9 @@ public class UserDashboard extends AppCompatActivity {
     private Button editProfileButton;
     private Button addFriendsButton;
     private Button createFriendButton;
-    private Button myEventsButton;
+    private Button myOccasionsButton;
     private Button myFriendsButton;
-    private Button createEventButton;
+    private Button createOccasionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +45,9 @@ public class UserDashboard extends AppCompatActivity {
         editProfileButton = findViewById(R.id.dashboard_edit_profile_button);
         addFriendsButton = findViewById(R.id.dashboard_add_friends_button);
         createFriendButton = findViewById(R.id.dashboard_create_friend_button);
-        myEventsButton = findViewById(R.id.dashboard_my_events_button);
+        myOccasionsButton = findViewById(R.id.dashboard_my_occasions_button);
         myFriendsButton = findViewById(R.id.dashboard_my_friends_button);
-        createEventButton = findViewById(R.id.dashboard_create_event_button);
+        createOccasionButton = findViewById(R.id.dashboard_create_occasion_button);
 
         //TEMPORARY generic name added. will need to change to pull current users name into screen
         dashboardUsersName.setText("Sequoia Hancock");
@@ -81,11 +81,11 @@ public class UserDashboard extends AppCompatActivity {
             }
         });
 
-        //activates my events button
-        myEventsButton.setOnClickListener(new View.OnClickListener() {
+        //activates my occasions button
+        myOccasionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UserDashboard.this, EventPage.class);
+                Intent intent = new Intent(UserDashboard.this, OccasionPage.class);
                 startActivity(intent);
             }
         });
@@ -99,11 +99,11 @@ public class UserDashboard extends AppCompatActivity {
             }
         });
 
-        //activates create event button
-        createEventButton.setOnClickListener(new View.OnClickListener() {
+        //activates create occasion button
+        createOccasionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UserDashboard.this, CreateEvent.class);
+                Intent intent = new Intent(UserDashboard.this, CreateOccasion.class);
                 startActivity(intent);
             }
         });

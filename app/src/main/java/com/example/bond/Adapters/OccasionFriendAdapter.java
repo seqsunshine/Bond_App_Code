@@ -14,25 +14,25 @@ import com.example.bond.R;
 
 import java.util.List;
 
-public class EventFriendAdapter extends RecyclerView.Adapter<EventFriendAdapter.EventFriendViewHolder> {
+public class OccasionFriendAdapter extends RecyclerView.Adapter<OccasionFriendAdapter.OccasionFriendViewHolder> {
 
     private Context context;
     private List<Friend> friendList;
 
-    public EventFriendAdapter(Context context, List<Friend> friendList){
+    public OccasionFriendAdapter(Context context, List<Friend> friendList){
         this.context = context;
         this.friendList = friendList;
     }
 
     @NonNull
     @Override
-    public EventFriendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.event_friend_item, parent, false);
-        return new EventFriendViewHolder(view);
+    public OccasionFriendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.occasion_friend_item, parent, false);
+        return new OccasionFriendViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EventFriendViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OccasionFriendViewHolder holder, int position) {
         Friend currentFriend = friendList.get(position);
         holder.friendNameTextView.setText(currentFriend.getFriendName());
     }
@@ -42,12 +42,12 @@ public class EventFriendAdapter extends RecyclerView.Adapter<EventFriendAdapter.
         return friendList != null ? friendList.size() : 0;
     }
 
-    public static class EventFriendViewHolder extends RecyclerView.ViewHolder {
+    public static class OccasionFriendViewHolder extends RecyclerView.ViewHolder {
         TextView friendNameTextView; //add checkbox selection??
 
-        public EventFriendViewHolder(@NonNull View itemView) {
+        public OccasionFriendViewHolder(@NonNull View itemView) {
             super(itemView);
-            friendNameTextView = itemView.findViewById(R.id.event_friend_name_text_view);
+            friendNameTextView = itemView.findViewById(R.id.occasion_friend_name_text_view);
         }
     }
 

@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "user_custom_field",
         foreignKeys = @ForeignKey(
                 entity = User.class,
-                parentColumns = "ID",
+                parentColumns = "userID",
                 childColumns = "userOwnerID",
                 onDelete = ForeignKey.CASCADE),
         indices = {@Index("userOwnerID")})
