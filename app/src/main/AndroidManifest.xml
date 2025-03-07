@@ -13,9 +13,12 @@
         android:theme="@style/Theme.Bond"
         tools:targetApi="31">
         <activity
+            android:name=".UI.EditPreference"
+            android:exported="false" />
+        <activity
             android:name=".UI.AddFriend"
             android:exported="false"
-            android:parentActivityName=".UI.UserDashboard"/>
+            android:parentActivityName=".UI.UserDashboard" />
         <activity
             android:name=".UI.NewDate"
             android:exported="false" />
@@ -25,43 +28,43 @@
         <activity
             android:name=".UI.CreateOccasion"
             android:exported="false"
-            android:parentActivityName=".UI.UserDashboard"/>
+            android:parentActivityName=".UI.UserDashboard" />
         <activity
             android:name=".UI.CreateFriend"
             android:exported="false"
-            android:parentActivityName=".UI.UserDashboard"/>
+            android:parentActivityName=".UI.UserDashboard" />
         <activity
             android:name=".UI.EditProfile"
             android:exported="false"
-            android:parentActivityName=".UI.UserDashboard"/>
+            android:parentActivityName=".UI.UserDashboard" />
         <activity
             android:name=".UI.OccasionDetails"
             android:exported="false"
-            android:parentActivityName=".UI.OccasionPage"/>
+            android:parentActivityName=".UI.OccasionPage" />
         <activity
             android:name=".UI.FriendDetails"
             android:exported="false"
-            android:parentActivityName=".UI.FriendList"/>
+            android:parentActivityName=".UI.FriendList" />
         <activity
             android:name=".UI.OccasionPage"
             android:exported="false"
-            android:parentActivityName=".UI.UserDashboard"/>
+            android:parentActivityName=".UI.UserDashboard" />
         <activity
             android:name=".UI.FriendList"
             android:exported="false"
-            android:parentActivityName=".UI.UserDashboard"/>
+            android:parentActivityName=".UI.UserDashboard" />
         <activity
             android:name=".UI.UserDashboard"
             android:exported="false"
-            android:parentActivityName=".UI.LoginPage"/>
+            android:parentActivityName=".UI.LoginPage" />
         <activity
             android:name=".UI.CreateAccountPage"
             android:exported="false"
-            android:parentActivityName=".UI.HomeScreen"/>
+            android:parentActivityName=".UI.HomeScreen" />
         <activity
             android:name=".UI.LoginPage"
             android:exported="false"
-            android:parentActivityName=".UI.HomeScreen"/>
+            android:parentActivityName=".UI.HomeScreen" />
         <activity
             android:name=".UI.HomeScreen"
             android:exported="true">

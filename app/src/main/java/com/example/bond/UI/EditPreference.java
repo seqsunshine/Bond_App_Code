@@ -1,0 +1,87 @@
+package com.example.bond.UI;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.example.bond.R;
+
+import org.w3c.dom.Text;
+
+public class EditPreference extends AppCompatActivity {
+
+
+    public static final String EXTRA_PREFERENCE_NAME = "EXTRA_PREFERENCE_NAME";
+    public static final String EXTRA_PREFERENCE_DESCRIPTION = "EXTRA_PREFERENCE_DESCRIPTION";
+    public static final String EXTRA_PREFERENCE_POSITION = "EXTRA_PREFERENCE_POSITION";
+
+    private TextView titleTextView;
+    private EditText descriptionEditText;
+    private Button saveButton;
+
+    private String preferenceName;
+    private String currentDescription;
+    private int position;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_edit_preference);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        titleTextView = findViewById(R.id.edit_preference_title_text);
+        descriptionEditText = findViewById(R.id.edit_preference_edit_text);
+        saveButton = findViewById(R.id.edit_preference_button);
+
+        //retrieve data
+        Intent intent = getIntent();
+        if (intent != null) {
+            preferenceName = intent.getStringExtra(EXTRA_PREFERENCE_NAME);
+            currentDescription = intent.getStringExtra(EXTRA_PREFERENCE_DESCRIPTION);
+            position = intent.getIntExtra(EXTRA_PREFERENCE_POSITION, -1);
+        }
+
+        //set the title of the activity to the name of the preference
+        //may or may not want this....?
+        setTitle("Edit: " + preferenceName);
+        //update text view in layout to display preference name
+        if (!TextUtils.isEmpty(preferenceName)) {
+            titleTextView.setText(preferenceName);
+        }
+
+        //pre-fill the edit text with current description (if any)
+        if (TextUtils.isEmpty(currentDescription)) {
+            descriptionEditText.setText(currentDescription);
+        }
+
+        //activate save button
+        saveButton.setOnClickListener(v -> {
+            String newDescription = descriptionEditText.getText().toString().trim();
+            if(TextUtils.isEmpty(newDescription)) {
+                Toast.makeText(EditPreference.this, "Please enter a description", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            //add the description and position to the activity
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra(EXTRA_PREFERENCE_DESCRIPTION, newDescription);
+            resultIntent.putExtra(EXTRA_PREFERENCE_POSITION, position);
+            setResult(RESULT_OK, resultIntent);
+            finish();
+        });
+    }
+}

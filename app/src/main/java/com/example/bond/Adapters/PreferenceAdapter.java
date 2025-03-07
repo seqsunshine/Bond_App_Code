@@ -18,10 +18,12 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceAdapter.Pr
 
     private Context context;
     private List<Preference> preferenceList;
+    private OnPreferenceClickListener listener;
 
-    public PreferenceAdapter(Context context, List<Preference> preferenceList) {
+    public PreferenceAdapter(Context context, List<Preference> preferenceList, OnPreferenceClickListener listener) {
         this.context = context;
         this.preferenceList = preferenceList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -36,6 +38,17 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceAdapter.Pr
         Preference currentPreference = preferenceList.get(position);
         holder.preferenceNameTextView.setText(currentPreference.getName());
         holder.preferenceDescriptionTextView.setText(currentPreference.getDescription());
+
+        //set click listener on the item view
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pos = holder.getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onPreferenceClick(pos, preferenceList.get(pos));
+                }
+            }
+        });
     }
 
     @Override
@@ -58,5 +71,9 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceAdapter.Pr
     public void updatePreferenceList(List<Preference> newList) {
         this.preferenceList = newList;
         notifyDataSetChanged();
+    }
+
+    public interface OnPreferenceClickListener {
+        void onPreferenceClick(int position, Preference preference);
     }
 }
