@@ -1,6 +1,7 @@
 package com.example.bond.UI;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,13 +16,20 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.bond.DAO.UserDAO;
+import com.example.bond.Database.BondAppDatabase;
+import com.example.bond.Entities.User;
 import com.example.bond.R;
+import com.example.bond.Utils.PasswordUtils;
 
 public class LoginPage extends AppCompatActivity {
 
     private EditText usernameEditText;
     private EditText passwordEditText;
     private Button loginButton;
+
+    private BondAppDatabase db;
+    private UserDAO userDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +52,10 @@ public class LoginPage extends AppCompatActivity {
         passwordEditText = findViewById(R.id.password_edit_text);
         loginButton = findViewById(R.id.login_button);
 
+        //initialize database and DAO
+        db = BondAppDatabase.getDatabase(getApplicationContext());
+        userDAO = db.userDAO();
+
         //activate login button
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,16 +77,40 @@ public class LoginPage extends AppCompatActivity {
             return;
         }
 
-        // YOU WILL NEED TO ADD AUTHENTICATION LOGIC HERE, aka the username and password stuff.
-        //THIS IS INCOMPLETE
+        //run database query
+        BondAppDatabase.databaseWriteExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                //retrieve user from database
+                User user = userDAO.getUserByUserName(username);
+                if (user == null) {
+                    runOnUiThread(() ->
+                        Toast.makeText(LoginPage.this, "Username not found.", Toast.LENGTH_SHORT).show()
+                    );
+                    return;
+                }
 
-        // for now, a toast is added as a place holder
-        Toast.makeText(LoginPage.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                //verify password using PasswordUtils
+                boolean isValid = PasswordUtils.verifyPassword(password, user.getPasswordHash());
+                if (!isValid) {
+                    runOnUiThread(() ->
+                        Toast.makeText(LoginPage.this, "Incorrect password.", Toast.LENGTH_SHORT).show()
+                    );
+                    return;
+                }
 
-        //navigate to user dashboard
-        Intent intent = new Intent(LoginPage.this, UserDashboard.class);
-        startActivity(intent);
-        finish();
+                //successful login: store userID for later use
+                SharedPreferences prefs = getSharedPreferences("my_app_prefs", MODE_PRIVATE);
+                prefs.edit().putInt("current_user_id", user.getUserID()).apply();
+
+                runOnUiThread(() -> {
+                    Toast.makeText(LoginPage.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+                    //navigate to user dashboard
+                    Intent intent = new Intent(LoginPage.this, UserDashboard.class);
+                    startActivity(intent);
+                    finish();
+                });
+            }
+        });
     }
-
 }

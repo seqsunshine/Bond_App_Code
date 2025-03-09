@@ -1,5 +1,6 @@
 package com.example.bond.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,9 +14,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.bond.DAO.UserDAO;
 import com.example.bond.Database.BondAppDatabase;
 import com.example.bond.Entities.User;
 import com.example.bond.R;
+import com.example.bond.Utils.PasswordUtils;
 
 public class CreateAccountPage extends AppCompatActivity {
 
@@ -26,6 +29,7 @@ public class CreateAccountPage extends AppCompatActivity {
     private Button createAccountButton;
 
     private BondAppDatabase db;
+    private UserDAO userDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +54,9 @@ public class CreateAccountPage extends AppCompatActivity {
         confirmPasswordEditText = findViewById(R.id.confirm_password_edit_text);
         createAccountButton = findViewById(R.id.create_account_button);
 
-        //get the database
+        //get the database and DAO
         db = BondAppDatabase.getDatabase(getApplicationContext());
+        userDAO = db.userDAO();
 
         //activate create account button
         createAccountButton.setOnClickListener(new View.OnClickListener() {
@@ -82,14 +87,16 @@ public class CreateAccountPage extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
             return;
         }
-        //ADD THE HASHING OF PASSWORDS HERE. This part is incomplete!!
+
+        // generate a secure password hash, salt:hash
+        String securePassword = PasswordUtils.generateSecurePassword(passwordHash);
 
         //create new user
         final User newUser = new User(
                 0,
                 userName,
                 emailAddress,
-                passwordHash,
+                securePassword,
                 null,
                 null,
                 null,
@@ -104,17 +111,39 @@ public class CreateAccountPage extends AppCompatActivity {
                 null
         );
 
-        //maybe need to add some validation to ensure no duplicate user names or emails??
+        // check for duplicates
         BondAppDatabase.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                db.userDAO().insertUser(newUser);
+                User existingByUsername = db.userDAO().getUserByUserName(userName);
+                User existingByEmail = db.userDAO().getUserByEmailAddress(emailAddress);
 
+                if (existingByUsername != null) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(CreateAccountPage.this, "That username is taken!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    return;
+                }
+
+                if (existingByEmail != null) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(CreateAccountPage.this, "An account with that email address exists!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    return;
+                }
+
+                //if no duplicates, insert the new user
+                db.userDAO().insertUser(newUser);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(CreateAccountPage.this, "Success! Account Created",
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CreateAccountPage.this, "Success! Account created.", Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 });

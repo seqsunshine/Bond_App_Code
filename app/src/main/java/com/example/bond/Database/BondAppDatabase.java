@@ -27,7 +27,7 @@ import java.util.concurrent.Executors;
 
 @Database(entities = {User.class, Friend.class, Occasion.class, UserCustomField.class,
         FriendCustomField.class, OccasionFriendCrossRef.class},
-        views ={FriendWithCustomField.class}, version = 1, exportSchema = false)
+        views ={FriendWithCustomField.class}, version = 2, exportSchema = false)
 public abstract class BondAppDatabase extends RoomDatabase{
     public abstract UserDAO userDAO();
     public abstract FriendDAO friendDAO();
@@ -47,6 +47,7 @@ public abstract class BondAppDatabase extends RoomDatabase{
             synchronized (BondAppDatabase.class){
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                         BondAppDatabase.class, "bond_app_database")
+                        .fallbackToDestructiveMigration()
                         .addCallback(new RoomDatabase.Callback(){
                             @Override
                             public void onCreate(@NonNull SupportSQLiteDatabase db) {
@@ -75,15 +76,6 @@ public abstract class BondAppDatabase extends RoomDatabase{
                         })
                         .build();
             }
-            //commented out. this was the original piece of code, changed to add dummy user
-//            synchronized (BondAppDatabase.class) {
-//                if (INSTANCE == null) {
-//                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-//                            BondAppDatabase.class, "bond_app_database")
-//                            .fallbackToDestructiveMigration()
-//                            .build();
-//                }
-//            }
         }
         return INSTANCE;
     }
