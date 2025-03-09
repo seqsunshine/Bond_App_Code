@@ -24,10 +24,12 @@ public class EditPreference extends AppCompatActivity {
     public static final String EXTRA_PREFERENCE_NAME = "EXTRA_PREFERENCE_NAME";
     public static final String EXTRA_PREFERENCE_DESCRIPTION = "EXTRA_PREFERENCE_DESCRIPTION";
     public static final String EXTRA_PREFERENCE_POSITION = "EXTRA_PREFERENCE_POSITION";
+    public static final String EXTRA_PREFERENCE_DELETE = "EXTRA_PREFERENCE_DELETE";
 
     private TextView titleTextView;
     private EditText descriptionEditText;
     private Button saveButton;
+    private Button deleteButton;
 
     private String preferenceName;
     private String currentDescription;
@@ -47,6 +49,7 @@ public class EditPreference extends AppCompatActivity {
         titleTextView = findViewById(R.id.edit_preference_title_text);
         descriptionEditText = findViewById(R.id.edit_preference_edit_text);
         saveButton = findViewById(R.id.edit_preference_button);
+        deleteButton = findViewById(R.id.delete_preference_button);
 
         //retrieve data
         Intent intent = getIntent();
@@ -57,7 +60,6 @@ public class EditPreference extends AppCompatActivity {
         }
 
         //set the title of the activity to the name of the preference
-        //may or may not want this....?
         setTitle("Edit: " + preferenceName);
         //update text view in layout to display preference name
         if (!TextUtils.isEmpty(preferenceName)) {
@@ -80,6 +82,16 @@ public class EditPreference extends AppCompatActivity {
             Intent resultIntent = new Intent();
             resultIntent.putExtra(EXTRA_PREFERENCE_DESCRIPTION, newDescription);
             resultIntent.putExtra(EXTRA_PREFERENCE_POSITION, position);
+            resultIntent.putExtra(EXTRA_PREFERENCE_DELETE, false);
+            setResult(RESULT_OK, resultIntent);
+            finish();
+        });
+
+        //activate delete button
+        deleteButton.setOnClickListener(v -> {
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra(EXTRA_PREFERENCE_POSITION, position);
+            resultIntent.putExtra(EXTRA_PREFERENCE_DELETE, true);
             setResult(RESULT_OK, resultIntent);
             finish();
         });

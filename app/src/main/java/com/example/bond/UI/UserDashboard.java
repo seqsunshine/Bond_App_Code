@@ -1,11 +1,14 @@
 package com.example.bond.UI;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +16,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.bond.DAO.UserDAO;
+import com.example.bond.Database.BondAppDatabase;
+import com.example.bond.Entities.User;
 import com.example.bond.R;
 
 public class UserDashboard extends AppCompatActivity {
@@ -23,6 +29,10 @@ public class UserDashboard extends AppCompatActivity {
     private Button myOccasionsButton;
     private Button myFriendsButton;
     private Button createOccasionButton;
+
+    private BondAppDatabase db;
+    private UserDAO userDAO;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +59,12 @@ public class UserDashboard extends AppCompatActivity {
         myFriendsButton = findViewById(R.id.dashboard_my_friends_button);
         createOccasionButton = findViewById(R.id.dashboard_create_occasion_button);
 
-        //TEMPORARY generic name added. will need to change to pull current users name into screen
-        dashboardUsersName.setText("Sequoia Hancock");
+        //initialize database and DAO
+        db = BondAppDatabase.getDatabase(getApplicationContext());
+        userDAO = db.userDAO();
+
+        // load current user
+        loadCurrentUser();
 
         // ALSO!!!! need to add importing own profile picture stuff... tbd on how to do this
 
@@ -107,5 +121,25 @@ public class UserDashboard extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void loadCurrentUser() {
+        SharedPreferences prefs = getSharedPreferences("my_app_prefs", MODE_PRIVATE);
+        int userID = prefs.getInt("current_user_id", -1);
+        if(userID != -1) {
+            BondAppDatabase.databaseWriteExecutor.execute(() -> {
+                currentUser = userDAO.getUserByID(userID);
+                runOnUiThread(() -> {
+                    if (currentUser != null && !TextUtils.isEmpty(currentUser.getName())) {
+                        dashboardUsersName.setText(currentUser.getName());
+                    } else {
+                        dashboardUsersName.setText("");
+                    }
+                });
+            });
+        } else {
+            Toast.makeText(this, "No user logged in", Toast.LENGTH_SHORT).show();
+            runOnUiThread(() -> dashboardUsersName.setText(""));
+        }
     }
 }

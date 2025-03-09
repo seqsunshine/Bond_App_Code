@@ -1,11 +1,13 @@
 package com.example.bond.UI;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +21,7 @@ import com.example.bond.Adapters.PreferenceAdapter;
 import com.example.bond.DAO.UserDAO;
 import com.example.bond.Database.BondAppDatabase;
 import com.example.bond.Entities.User;
+import com.example.bond.Entities.UserCustomField;
 import com.example.bond.Models.Preference;
 import com.example.bond.R;
 
@@ -121,81 +124,165 @@ public class EditProfile extends AppCompatActivity {
             }
         });
 
-        loadUserPreferences();
+        //initialize database and DAO
+        db = BondAppDatabase.getDatabase(getApplicationContext());
+        userDAO = db.userDAO();
+
+        loadCurrentUser();
+    }
+
+    //loads current user
+    private void loadCurrentUser() {
+        SharedPreferences prefs = getSharedPreferences("my_app_prefs", MODE_PRIVATE);
+        int userID = prefs.getInt("current_user_id", -1);
+        if (userID != -1) {
+            BondAppDatabase.databaseWriteExecutor.execute(() -> {
+                //load current user from database
+                currentUser = userDAO.getUserByID(userID);
+
+                //update the UI on main thread
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        myPreferencesText.setText(currentUser.getName());
+                        loadUserPreferences();
+                    }
+                });
+            });
+        } else {
+            Toast.makeText(this, "No user logged in", Toast.LENGTH_SHORT).show();
+        }
     }
 
     //loads user preferences
     private void loadUserPreferences() {
-        //need to create logic for this.. NOT FINISHED YET temp data for now
+        if (currentUser != null) {
+            //run query on background thread
+            BondAppDatabase.databaseWriteExecutor.execute(() -> {
+                //get custom fields from database
+                List<UserCustomField> customFields = db.userCustomFieldDAO().getCustomFieldsForUser(currentUser.getUserID());
+                //convert custom field objects to preference objects
+                List<Preference> customPreferences = new ArrayList<>();
+                if (customFields != null) {
+                    for (UserCustomField field : customFields) {
+                        customPreferences.add(new Preference(field.getFieldName(), field.getFieldValue()));
+                    }
+                }
 
-        //create default generic preferences with blank values
-        List<Preference> defaultPreferences = new ArrayList<>();
-        defaultPreferences.add(new Preference("Birthday: ", ""));
-        defaultPreferences.add(new Preference("Favorite Color: ", ""));
-        defaultPreferences.add(new Preference("Allergies", ""));
-        defaultPreferences.add(new Preference("Dietary Restrictions: ", ""));
-        defaultPreferences.add(new Preference("Favorite Food: ", ""));
-        defaultPreferences.add(new Preference("Hobbies: ", ""));
-        defaultPreferences.add(new Preference("Current Job: ",""));
-        defaultPreferences.add(new Preference("Pet Name: ", ""));
-        defaultPreferences.add(new Preference("Partner Name: ", ""));
-        defaultPreferences.add(new Preference("Interests: ", ""));
+                List<Preference> defaultPreferences = new ArrayList<>();
+                //load default preferences
+                defaultPreferences.add(new Preference("Name: ",
+                        currentUser.getName() != null ? currentUser.getName() : ""));
+                defaultPreferences.add(new Preference("Birthday: ",
+                        currentUser.getBirthday() != null ? currentUser.getBirthday() : ""));
+                defaultPreferences.add(new Preference("Favorite Color: ",
+                        currentUser.getFavoriteColor() != null ? currentUser.getFavoriteColor() : ""));
+                defaultPreferences.add(new Preference("Allergies: ",
+                        currentUser.getAllergies() != null ? currentUser.getAllergies() : ""));
+                defaultPreferences.add(new Preference("Dietary Restrictions: ",
+                        currentUser.getDietaryRestrictions() != null ? currentUser.getDietaryRestrictions() : ""));
+                defaultPreferences.add(new Preference("Favorite Food: ",
+                        currentUser.getFavoriteFood() != null ? currentUser.getFavoriteFood() : ""));
+                defaultPreferences.add(new Preference("Hobbies: ",
+                        currentUser.getHobbies() != null ? currentUser.getHobbies() : ""));
+                defaultPreferences.add(new Preference("Current Job: ",
+                        currentUser.getCurrentJob() != null ? currentUser.getCurrentJob() : ""));
+                defaultPreferences.add(new Preference("Pet Name: ",
+                        currentUser.getPetName() != null ? currentUser.getPetName() : ""));
+                defaultPreferences.add(new Preference("Partner Name: ",
+                        currentUser.getPartnerName() != null ? currentUser.getPartnerName() : ""));
+                defaultPreferences.add(new Preference("Interests: ",
+                        currentUser.getInterests() != null ? currentUser.getInterests() : ""));
 
-        //retrieve custom preferences from the database
-        List<Preference> customPreferences = new ArrayList<>();
-        //need to add logic to load each new custom preference
+                //merge default and custom preferences
+                List<Preference> combinedPreferences = new ArrayList<>(defaultPreferences);
+                combinedPreferences.addAll(customPreferences);
 
-        //merge default and custom preferences
-        List<Preference> combinedPreferences = new ArrayList<>(defaultPreferences);
-        combinedPreferences.addAll(customPreferences);
-
-        //clear current list and update it with combined list
-        preferenceList.clear();
-        preferenceList.addAll(combinedPreferences);
-
-        //notify data set changed so recycler view updates
-        preferenceAdapter.notifyDataSetChanged();
+                //update adapters list
+                runOnUiThread(() -> {
+                    preferenceList.clear();
+                    preferenceList.addAll(combinedPreferences);
+                    preferenceAdapter.notifyDataSetChanged();
+                });
+            });
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_EDIT_PREFERENCE && resultCode == RESULT_OK && data != null) {
-            String updatedDescription = data.getStringExtra(EditPreference.EXTRA_PREFERENCE_DESCRIPTION);
+            boolean shouldDelete = data.getBooleanExtra(EditPreference.EXTRA_PREFERENCE_DELETE, false);
             int position = data.getIntExtra(EditPreference.EXTRA_PREFERENCE_POSITION, -1);
             if (position != -1) {
                 //update preference
                 Preference pref = preferenceList.get(position);
-                pref.setDescription(updatedDescription);
-                preferenceAdapter.notifyItemChanged(position);
+                if (shouldDelete) {
+                    //remove from list and update adapter
+                    preferenceList.remove(position);
+                    preferenceAdapter.notifyItemRemoved(position);
 
-                //update corresponding field in currentUser
-                if (pref.getName().contains("Birthday")) {
-                    currentUser.setFavoriteColor(updatedDescription);
-                } else if (pref.getName().contains("Favorite Color")) {
-                    currentUser.setFavoriteColor(updatedDescription);
-                } else if (pref.getName().contains("Allergies")) {
-                    currentUser.setAllergies(updatedDescription);
-                } else if (pref.getName().contains("Dietary Restrictions")) {
-                    currentUser.setDietaryRestrictions(updatedDescription);
-                } else if (pref.getName().contains("Favorite Food")) {
-                    currentUser.setFavoriteFood(updatedDescription);
-                } else if (pref.getName().contains("Hobbies")) {
-                    currentUser.setHobbies(updatedDescription);
-                } else if (pref.getName().contains("Current Job")) {
-                    currentUser.setCurrentJob(updatedDescription);
-                } else if (pref.getName().contains("Pet Name")) {
-                    currentUser.setPetName(updatedDescription);
-                } else if (pref.getName().contains("Partner Name")) {
-                    currentUser.setPartnerName(updatedDescription);
-                } else if (pref.getName().contains("Interests")) {
-                    currentUser.setInterests(updatedDescription);
+                    if (isCustomPreference(pref)) {
+                        BondAppDatabase.databaseWriteExecutor.execute(() -> {
+                            db.userCustomFieldDAO().deleteCustomFieldByNameAndUserID(pref.getName(), currentUser.getUserID());
+                        });
+                    }
+                } else {
+                    String updatedDescription = data.getStringExtra(EditPreference.EXTRA_PREFERENCE_DESCRIPTION);
+                    pref.setDescription(updatedDescription);
+                    preferenceAdapter.notifyItemChanged(position);
+                    //update corresponding field in currentUser
+                    if (pref.getName().contains("Name")) {
+                        currentUser.setName(updatedDescription);
+                    } else if (pref.getName().contains("Birthday")) {
+                        currentUser.setBirthday(updatedDescription);
+                    } else if (pref.getName().contains("Favorite Color")) {
+                        currentUser.setFavoriteColor(updatedDescription);
+                    } else if (pref.getName().contains("Allergies")) {
+                        currentUser.setAllergies(updatedDescription);
+                    } else if (pref.getName().contains("Dietary Restrictions")) {
+                        currentUser.setDietaryRestrictions(updatedDescription);
+                    } else if (pref.getName().contains("Favorite Food")) {
+                        currentUser.setFavoriteFood(updatedDescription);
+                    } else if (pref.getName().contains("Hobbies")) {
+                        currentUser.setHobbies(updatedDescription);
+                    } else if (pref.getName().contains("Current Job")) {
+                        currentUser.setCurrentJob(updatedDescription);
+                    } else if (pref.getName().contains("Pet Name")) {
+                        currentUser.setPetName(updatedDescription);
+                    } else if (pref.getName().contains("Partner Name")) {
+                        currentUser.setPartnerName(updatedDescription);
+                    } else if (pref.getName().contains("Interests")) {
+                        currentUser.setInterests(updatedDescription);
+                    }
+
+                    BondAppDatabase.databaseWriteExecutor.execute(() -> {
+                        db.userDAO().updateUser(currentUser);
+                    });
                 }
-
-                BondAppDatabase.databaseWriteExecutor.execute(() -> {
-                    db.userDAO().updateUser(currentUser);
-                });
             }
         }
+    }
+
+    private boolean isCustomPreference(Preference pref) {
+        String name = pref.getName();
+        return !(name.contains("Name: ") ||
+                name.contains("Birthday: ") ||
+                name.contains("Favorite Color: ") ||
+                name.contains("Allergies: ") ||
+                name.contains("Dietary Restrictions: ") ||
+                name.contains("Favorite Food: ") ||
+                name.contains("Hobbies: ") ||
+                name.contains("Current Job: ") ||
+                name.contains("Pet Name: ") ||
+                name.contains("Partner Name: ") ||
+                name.contains("Interests: "));
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadUserPreferences();
     }
 }

@@ -14,6 +14,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.bond.DAO.UserCustomFieldDAO;
+import com.example.bond.Database.BondAppDatabase;
+import com.example.bond.Entities.User;
+import com.example.bond.Entities.UserCustomField;
 import com.example.bond.R;
 
 public class NewPreference extends AppCompatActivity {
@@ -21,6 +25,9 @@ public class NewPreference extends AppCompatActivity {
     private EditText preferenceTitleEditText;
     private EditText preferenceDescriptionEditText;
     private Button createNewPreferenceButton;
+
+    private BondAppDatabase db;
+    private UserCustomFieldDAO userCustomFieldDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,10 @@ public class NewPreference extends AppCompatActivity {
         preferenceDescriptionEditText = findViewById(R.id.create_new_preference_description_edit_text);
         createNewPreferenceButton = findViewById(R.id.create_new_preference_button);
 
+        //initialize database and DAO
+        db = BondAppDatabase.getDatabase(getApplicationContext());
+        userCustomFieldDAO = db.userCustomFieldDAO();
+
         //activate new preference button
         createNewPreferenceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,10 +69,25 @@ public class NewPreference extends AppCompatActivity {
                     return;
                 }
 
-                //add logic to save the preference to the database
-                //TEMPORARY TOAST MESSAGE
-                Toast.makeText(NewPreference.this, "Preference created: " + title + " " + description, Toast.LENGTH_SHORT).show();
-                finish();
+                //get current user ID
+                int currentUserID = getSharedPreferences("my_app_prefs", MODE_PRIVATE).getInt("current_user_id", -1);
+                if (currentUserID == -1) {
+                    Toast.makeText(NewPreference.this, "No user logged in", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //create new custom field
+                UserCustomField newField = new UserCustomField(0, currentUserID, title, description);
+
+                //insert new custom preference
+                BondAppDatabase.databaseWriteExecutor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        userCustomFieldDAO.insertUserCustomField(newField);
+                        Toast.makeText(NewPreference.this, "Preference created: " + title, Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
             }
         });
     }

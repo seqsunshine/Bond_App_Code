@@ -1,5 +1,6 @@
 package com.example.bond.UI;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -14,6 +15,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.bond.DAO.UserCustomFieldDAO;
+import com.example.bond.Database.BondAppDatabase;
+import com.example.bond.Entities.UserCustomField;
 import com.example.bond.R;
 
 public class NewDate extends AppCompatActivity {
@@ -21,6 +25,9 @@ public class NewDate extends AppCompatActivity {
     private EditText dateTitleEditText;
     private EditText dateEditText;
     private Button createNewDateButton;
+
+    private BondAppDatabase db;
+    private UserCustomFieldDAO userCustomFieldDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,10 @@ public class NewDate extends AppCompatActivity {
         dateEditText = findViewById(R.id.create_new_date_date_edit_text);
         createNewDateButton = findViewById(R.id.create_new_date_button);
 
+        //initialize database and dao
+        db = BondAppDatabase.getDatabase(getApplicationContext());
+        userCustomFieldDAO = db.userCustomFieldDAO();
+
         //activate create date button
         createNewDateButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -58,10 +69,25 @@ public class NewDate extends AppCompatActivity {
                     return;
                 }
 
-                //add logic to save date to database
-                //TEMPORARY TOAST MESSAGE
-                Toast.makeText(NewDate.this, "Date Created: " + title + " on " + date, Toast.LENGTH_SHORT).show();
-                finish();
+                //get current user's ID
+                SharedPreferences prefs = getSharedPreferences("my_app_prefs", MODE_PRIVATE);
+                int currentUserID = prefs.getInt("current_user_id", -1);
+                if (currentUserID == -1) {
+                    Toast.makeText(NewDate.this, "No user logged in", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //create a new user custom field object
+                UserCustomField newDateField = new UserCustomField(0, currentUserID, title, date);
+
+                //insert the date
+                BondAppDatabase.databaseWriteExecutor.execute(() -> {
+                    userCustomFieldDAO.insertUserCustomField(newDateField);
+                    runOnUiThread(() -> {
+                        Toast.makeText(NewDate.this, "Date Created: " + title + " on " + date, Toast.LENGTH_SHORT).show();
+                        finish();
+                    });
+                });
             }
         });
     }

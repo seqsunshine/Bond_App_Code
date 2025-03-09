@@ -23,4 +23,7 @@ public interface UserCustomFieldDAO {
 
     @Query("SELECT * FROM user_custom_field WHERE userOwnerID = :userID")
     List<UserCustomField> getCustomFieldsForUser(int userID);
+
+    @Query("DELETE FROM user_custom_field WHERE fieldName = :name AND userOwnerID = :userID")
+    void deleteCustomFieldByNameAndUserID(String name, int userID);
 }
