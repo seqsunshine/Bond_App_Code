@@ -1,5 +1,6 @@
 package com.example.bond.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -17,6 +18,7 @@ import com.example.bond.Entities.Friend;
 import com.example.bond.Entities.User;
 import com.example.bond.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FriendList extends AppCompatActivity {
@@ -26,6 +28,7 @@ public class FriendList extends AppCompatActivity {
     private List<User> friendList;
     private RecyclerView recyclerView;
     private FriendAdapter friendAdapter;
+    private int currentUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,7 @@ public class FriendList extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        int currentUserID = getSharedPreferences("my_app_prefs", MODE_PRIVATE).getInt("current_user_id", -1);
+        currentUserID = getSharedPreferences("my_app_prefs", MODE_PRIVATE).getInt("current_user_id", -1);
 
         //initialize recycler view
         recyclerView = findViewById(R.id.my_friends_recycler);
@@ -53,17 +56,34 @@ public class FriendList extends AppCompatActivity {
         db = BondAppDatabase.getDatabase(getApplicationContext());
         friendDAO = db.friendDAO();
 
+        //initialize friend list
+        friendList = new ArrayList<>();
+
         //load friends
         loadFriends(currentUserID);
+
+        friendAdapter = new FriendAdapter(FriendList.this, friendList, friend -> {
+            Intent intent = new Intent(FriendList.this, FriendDetails.class);
+            intent.putExtra("friendUserID", friend.getUserID());
+            startActivity(intent);
+        });
+        recyclerView.setAdapter(friendAdapter);
     }
 
     private void loadFriends(int currentUserID) {
         BondAppDatabase.databaseWriteExecutor.execute(() -> {
-            friendList = friendDAO.getFriendUsersForOwner(currentUserID);
+            List<User> results = friendDAO.getFriendUsersForOwner(currentUserID);
             runOnUiThread(() -> {
-                friendAdapter = new FriendAdapter(FriendList.this, friendList);
-                recyclerView.setAdapter(friendAdapter);
+                friendList.clear();
+                friendList.addAll(results);
+                friendAdapter.notifyDataSetChanged();
             });
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadFriends(currentUserID);
     }
 }

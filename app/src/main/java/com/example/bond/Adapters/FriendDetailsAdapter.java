@@ -41,8 +41,9 @@ public class FriendDetailsAdapter extends RecyclerView.Adapter<FriendDetailsAdap
 
     @Override
     public int getItemCount() {
-        return detailList != null ? detailList.size() : 0;
+        return detailList .size();
     }
+
 
     public static class DetailViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;

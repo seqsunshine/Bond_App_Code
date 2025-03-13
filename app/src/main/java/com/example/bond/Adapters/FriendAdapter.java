@@ -21,10 +21,16 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 
     private Context context;
     private List<User> userList;
+    private OnFriendClickListener clickListener;
 
-    public FriendAdapter(Context context, List<User> userList) {
+    public interface OnFriendClickListener {
+        void onFriendClick(User user);
+    }
+
+    public FriendAdapter(Context context, List<User> userList, OnFriendClickListener clickListener) {
         this.context = context;
         this.userList = userList;
+        this.clickListener = clickListener;
     }
 
     @NonNull
@@ -39,6 +45,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         User user = userList.get(position);
         holder.friendNameTextView.setText(user.getName());
         holder.friendUserNameTextView.setText(user.getUserName());
+
+        holder.itemView.setOnClickListener(v -> {
+            if (clickListener != null) {
+                clickListener.onFriendClick(user);
+            }
+        });
     }
 
     @Override
