@@ -3,9 +3,9 @@ package com.example.bond.UI;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bond.Adapters.OccasionFriendAdapter;
 import com.example.bond.Adapters.OccasionPreferenceAdapter;
+import com.example.bond.DAO.FriendDAO;
+import com.example.bond.DAO.UserDAO;
+import com.example.bond.Database.BondAppDatabase;
 import com.example.bond.Entities.Friend;
 import com.example.bond.Entities.Occasion;
 import com.example.bond.Entities.User;
@@ -54,6 +57,17 @@ public class CreateOccasion extends AppCompatActivity {
     private List<Preference> filteredPreferenceList;
     private OccasionPreferenceAdapter occasionPreferenceAdapter;
 
+    //adding friends and preferences
+    private List<User> selectedFriend;
+    private List<Preference> selectedPreference;
+
+    //database related
+    private BondAppDatabase db;
+    private FriendDAO friendDAO;
+    private UserDAO userDAO;
+
+    private int currentUserID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,30 +101,55 @@ public class CreateOccasion extends AppCompatActivity {
         //button
         occasionCreateOccasionButton = findViewById(R.id.occasion_create_occasion_button);
 
+        //initialize selected friend and preference
+        selectedFriend = new ArrayList<>();
+        selectedPreference = new ArrayList<>();
+
         //set up recycler views
-        LinearLayoutManager friendsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager. HORIZONTAL, false);
+        LinearLayoutManager friendsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         occasionSelectFriendsRecycler.setLayoutManager(friendsLayoutManager);
 
-        LinearLayoutManager preferencesLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager preferencesLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         occasionSelectPreferencesRecycler.setLayoutManager(preferencesLayoutManager);
 
         //initialize friend list
         friendList = new ArrayList<>();
         filteredFriendList = new ArrayList<>(friendList);
-        //need to add info to filter in data. NOT DONE
-
-        //initialize occasion friend attached to recycler
-        occasionFriendAdapter = new OccasionFriendAdapter(this, filteredFriendList);
-        occasionSelectFriendsRecycler.setAdapter(occasionFriendAdapter);
 
         //initialize preference list
         preferenceList = new ArrayList<>();
         filteredPreferenceList = new ArrayList<>(preferenceList);
-        //need to add info to filter in data. NOT DONE
+
+        //initialize occasion friend attached to recycler
+        occasionFriendAdapter = new OccasionFriendAdapter(this, filteredFriendList, (User user) -> {
+            if (!selectedFriend.contains(user)) {
+                selectedFriend.add(user);
+                Toast.makeText(CreateOccasion.this, "Friend added!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(CreateOccasion.this, "Friend already selected!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        occasionSelectFriendsRecycler.setAdapter(occasionFriendAdapter);
 
         //initialize occasion preference attached to recycler
-        occasionPreferenceAdapter = new OccasionPreferenceAdapter(this, filteredPreferenceList);
+        occasionPreferenceAdapter = new OccasionPreferenceAdapter(this, filteredPreferenceList, (Preference preference) -> {
+            if (!selectedPreference.contains(preference)) {
+                selectedPreference.add(preference);
+                Toast.makeText(CreateOccasion.this, "Preference added!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(CreateOccasion.this, "Preference already selected!", Toast.LENGTH_SHORT).show();
+            }
+        });
         occasionSelectPreferencesRecycler.setAdapter(occasionPreferenceAdapter);
+
+        //initialize database and DAO
+        db = BondAppDatabase.getDatabase(getApplicationContext());
+        friendDAO = db.friendDAO();
+        userDAO = db.userDAO();
+
+        //get current user id
+        currentUserID = getSharedPreferences("my_app_prefs", MODE_PRIVATE).getInt("current_user_id", -1);
+
 
         //set up friend search
         occasionSearchFriendsEditText.addTextChangedListener(new TextWatcher() {
@@ -149,42 +188,67 @@ public class CreateOccasion extends AppCompatActivity {
         });
 
         //activate create occasion button
-        occasionCreateOccasionButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                createOccasion();
-            }
+        occasionCreateOccasionButton.setOnClickListener(v -> {
+            createOccasion();
         });
     }
     //filters friends
     private void filterFriends(String query) {
-        filteredFriendList.clear();
-        if(query.isEmpty()){
-            filteredFriendList.addAll(friendList);
-        }
-        else{
-            for(User user : friendList){
-                if(user.getUserName().toLowerCase().contains(query.toLowerCase())){
-                    filteredFriendList.add(user);
-                }
-            }
-        }
-        occasionFriendAdapter.notifyDataSetChanged();
+       if (query.isEmpty()) {
+           filteredFriendList.clear();
+           occasionFriendAdapter.notifyDataSetChanged();
+           return;
+       } else {
+           BondAppDatabase.databaseWriteExecutor.execute(() -> {
+               List<User> results = friendDAO.searchFriendUsersForOwner(currentUserID, query);
+               runOnUiThread(() -> {
+                   filteredFriendList.clear();
+                   filteredFriendList.addAll(results);
+                   occasionFriendAdapter.notifyDataSetChanged();
+               });
+           });
+       }
     }
 
     //filters preferences
     private void filterPreferences(String query) {
-        filteredPreferenceList.clear();
-        if(query.isEmpty()){
-            filteredPreferenceList.addAll(preferenceList);
+        final String q = query.trim().toLowerCase();
+        if(q.isEmpty()){
+            runOnUiThread(() -> {
+                filteredPreferenceList.clear();
+                occasionPreferenceAdapter.notifyDataSetChanged();
+            });
+            return;
             }
-        else {
-            for(Preference preference : preferenceList){
-                if(preference.getName().toLowerCase().contains(query.toLowerCase())){
-                    filteredPreferenceList.add(preference);
+        BondAppDatabase.databaseWriteExecutor.execute(() -> {
+            User currentUser = userDAO.getUserByID(currentUserID);
+            List<Preference> allPrefs = new ArrayList<>();
+            if(currentUser != null){
+                allPrefs.add(new Preference("Birthday", currentUser.getBirthday()));
+                allPrefs.add(new Preference("Favorite Color", currentUser.getFavoriteColor()));
+                allPrefs.add(new Preference("Allergies", currentUser.getAllergies()));
+                allPrefs.add(new Preference("Dietary Restrictions", currentUser.getDietaryRestrictions()));
+                allPrefs.add(new Preference("Favorite Food", currentUser.getFavoriteFood()));
+                allPrefs.add(new Preference("Hobbies", currentUser.getHobbies()));
+                allPrefs.add(new Preference("Current Job", currentUser.getCurrentJob()));
+                allPrefs.add(new Preference("Pet Name", currentUser.getPetName()));
+                allPrefs.add(new Preference("Partner Name", currentUser.getPartnerName()));
+                allPrefs.add(new Preference("Interests", currentUser.getInterests()));
+            }
+
+            List<Preference> results = new ArrayList<>();
+            for (Preference pref : allPrefs) {
+                if (pref.getName() != null && pref.getName().toLowerCase().contains(q)) {
+                    results.add(pref);
                 }
             }
-        }
+
+            runOnUiThread(() -> {
+                filteredPreferenceList.clear();
+                filteredPreferenceList.addAll(results);
+                occasionPreferenceAdapter.notifyDataSetChanged();
+            });
+        });
     }
 
     private void createOccasion(){
@@ -194,14 +258,18 @@ public class CreateOccasion extends AppCompatActivity {
         String description = occasionDescriptionEditText.getText().toString().trim();
 
         if(title.isEmpty() || date.isEmpty() || location.isEmpty() || description.isEmpty()){
-            //make a toast showing error message here
-            //make sure to look at required fields in Occasion to ensure all required fields here
-            //are actually required
+            Toast.makeText(this, "Please fill in all fields.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         Occasion newOccasion = new Occasion(0, title, date, location, description, null, 0);
-        //make sure to add logic to save the occasion to database here!!
-        //also add a toast to ensure that a successful occasion was created
+
+        BondAppDatabase.databaseWriteExecutor.execute(() -> {
+            long occasionID = db.occasionDAO().insertOccasion(newOccasion);
+            runOnUiThread(() -> {
+                Toast.makeText(this, "Occasion created!", Toast.LENGTH_SHORT).show();
+                finish();
+            });
+        });
     }
 }

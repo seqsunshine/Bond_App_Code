@@ -29,4 +29,7 @@ public interface FriendDAO {
 
    @Query("SELECT user.* FROM user INNER JOIN friend ON user.userID = friend.friendUserID WHERE friend.ownerUserID = :ownerID")
     List<User> getFriendUsersForOwner(int ownerID);
+
+   @Query("SELECT user.* FROM user INNER JOIN friend ON user.userID = friend.friendUserID WHERE friend.ownerUserID = :ownerID AND user.username LIKE '%' || :query || '%'")
+    List<User> searchFriendUsersForOwner(int ownerID, String query);
 }

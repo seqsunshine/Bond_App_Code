@@ -132,31 +132,31 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/occasion_select_friends_recycler"
-        android:layout_width="324dp"
-        android:layout_height="97dp"
+        android:layout_width="329dp"
+        android:layout_height="110dp"
         android:backgroundTint="#222222"
         android:fontFamily="@font/bright_demo"
         android:textColor="#F5F3EF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.402"
+        app:layout_constraintHorizontal_bias="0.414"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.604" />
+        app:layout_constraintVertical_bias="0.594" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/occasion_select_preferences_recycler"
-        android:layout_width="320dp"
-        android:layout_height="101dp"
+        android:layout_width="319dp"
+        android:layout_height="116dp"
         android:backgroundTint="#222222"
         android:fontFamily="@font/bright_demo"
         android:textColor="#F5F3EF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.384"
+        app:layout_constraintHorizontal_bias="0.38"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.88" />
+        app:layout_constraintVertical_bias="0.907" />
 
     <EditText
         android:id="@+id/occasion_search_friends_edit_text"
@@ -169,7 +169,7 @@
         app:layout_constraintHorizontal_bias="0.527"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.492" />
+        app:layout_constraintVertical_bias="0.472" />
 
     <EditText
         android:id="@+id/occasion_search_preferences_edit_text"
@@ -196,7 +196,7 @@
         app:layout_constraintHorizontal_bias="0.102"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.472" />
 
     <TextView
         android:id="@+id/occasion_search_preferences_text"
@@ -253,7 +253,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.439" />
+        app:layout_constraintVertical_bias="0.42" />
 
     <TextView
         android:id="@+id/occasion_select_preferences_text"
