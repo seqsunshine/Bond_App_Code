@@ -8,26 +8,25 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import com.example.bond.Entities.Friend;
+import com.example.bond.Entities.User;
 import com.example.bond.Relations.FriendWithCustomField;
 
 import java.util.List;
 
 @Dao
 public interface FriendDAO {
-    @Insert
+   @Insert
     long insertFriend(Friend friend);
 
-    @Update
-    int updateFriend(Friend friend);
+   @Query("SELECT * FROM friend WHERE ownerUserID = :ownerID")
+    List<Friend> getFriendsByOwnerID(int ownerID);
 
-    @Delete
+   @Delete
     int deleteFriend(Friend friend);
 
-    @Query("SELECT * FROM friend")
-    List<Friend> getAllFriends();
+   @Update
+    int updateFriend(Friend friend);
 
-    //gets all of a specific friends' fields
-    @Transaction
-    @Query("SELECT * FROM friend WHERE friendID = :friendID")
-    FriendWithCustomField getFriendWithCustomField(int friendID);
+   @Query("SELECT user.* FROM user INNER JOIN friend ON user.userID = friend.friendUserID WHERE friend.ownerUserID = :ownerID")
+    List<User> getFriendUsersForOwner(int ownerID);
 }

@@ -14,6 +14,7 @@ import com.example.bond.Adapters.FriendAdapter;
 import com.example.bond.DAO.FriendDAO;
 import com.example.bond.Database.BondAppDatabase;
 import com.example.bond.Entities.Friend;
+import com.example.bond.Entities.User;
 import com.example.bond.R;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class FriendList extends AppCompatActivity {
 
     private BondAppDatabase db;
     private FriendDAO friendDAO;
-    private List<Friend> friendList;
+    private List<User> friendList;
     private RecyclerView recyclerView;
     private FriendAdapter friendAdapter;
 
@@ -42,6 +43,8 @@ public class FriendList extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        int currentUserID = getSharedPreferences("my_app_prefs", MODE_PRIVATE).getInt("current_user_id", -1);
+
         //initialize recycler view
         recyclerView = findViewById(R.id.my_friends_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -51,23 +54,16 @@ public class FriendList extends AppCompatActivity {
         friendDAO = db.friendDAO();
 
         //load friends
-        loadFriends();
+        loadFriends(currentUserID);
     }
 
-    private void loadFriends() {
-        BondAppDatabase.databaseWriteExecutor.execute(new Runnable(){
-            @Override
-            public void run() {
-                friendList = friendDAO.getAllFriends();
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        friendAdapter = new FriendAdapter(FriendList.this, friendList);
-                        recyclerView.setAdapter(friendAdapter);
-                    }
-                });
-            }
+    private void loadFriends(int currentUserID) {
+        BondAppDatabase.databaseWriteExecutor.execute(() -> {
+            friendList = friendDAO.getFriendUsersForOwner(currentUserID);
+            runOnUiThread(() -> {
+                friendAdapter = new FriendAdapter(FriendList.this, friendList);
+                recyclerView.setAdapter(friendAdapter);
+            });
         });
     }
 }

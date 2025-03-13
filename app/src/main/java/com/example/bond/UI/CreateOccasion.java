@@ -19,6 +19,7 @@ import com.example.bond.Adapters.OccasionFriendAdapter;
 import com.example.bond.Adapters.OccasionPreferenceAdapter;
 import com.example.bond.Entities.Friend;
 import com.example.bond.Entities.Occasion;
+import com.example.bond.Entities.User;
 import com.example.bond.Models.Preference;
 import com.example.bond.R;
 
@@ -44,8 +45,8 @@ public class CreateOccasion extends AppCompatActivity {
     private Button occasionCreateOccasionButton;
 
     //friend data related
-    private List<Friend> friendList;
-    private List<Friend> filteredFriendList;
+    private List<User> friendList;
+    private List<User> filteredFriendList;
     private OccasionFriendAdapter occasionFriendAdapter;
 
     //preference data related
@@ -109,6 +110,7 @@ public class CreateOccasion extends AppCompatActivity {
 
         //initialize occasion preference attached to recycler
         occasionPreferenceAdapter = new OccasionPreferenceAdapter(this, filteredPreferenceList);
+        occasionSelectPreferencesRecycler.setAdapter(occasionPreferenceAdapter);
 
         //set up friend search
         occasionSearchFriendsEditText.addTextChangedListener(new TextWatcher() {
@@ -161,9 +163,9 @@ public class CreateOccasion extends AppCompatActivity {
             filteredFriendList.addAll(friendList);
         }
         else{
-            for(Friend friend : friendList){
-                if(friend.getFriendName().toLowerCase().contains(query.toLowerCase())){
-                    filteredFriendList.add(friend);
+            for(User user : friendList){
+                if(user.getUserName().toLowerCase().contains(query.toLowerCase())){
+                    filteredFriendList.add(user);
                 }
             }
         }

@@ -9,6 +9,8 @@ import androidx.room.Update;
 
 import com.example.bond.Entities.User;
 
+import java.util.List;
+
 @Dao
 public interface UserDAO {
     @Insert
@@ -28,4 +30,7 @@ public interface UserDAO {
 
     @Query("SELECT * FROM user WHERE emailAddress = :emailAddress")
     User getUserByEmailAddress(String emailAddress);
+
+    @Query("SELECT * FROM user WHERE userName LIKE '%' || :query || '%'")
+    List<User> searchUsers(String query);
 }

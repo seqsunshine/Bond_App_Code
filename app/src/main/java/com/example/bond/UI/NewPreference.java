@@ -14,8 +14,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.bond.DAO.FriendCustomFieldDAO;
 import com.example.bond.DAO.UserCustomFieldDAO;
 import com.example.bond.Database.BondAppDatabase;
+import com.example.bond.Entities.Friend;
+import com.example.bond.Entities.FriendCustomField;
 import com.example.bond.Entities.User;
 import com.example.bond.Entities.UserCustomField;
 import com.example.bond.R;
@@ -28,6 +31,7 @@ public class NewPreference extends AppCompatActivity {
 
     private BondAppDatabase db;
     private UserCustomFieldDAO userCustomFieldDAO;
+    private FriendCustomFieldDAO friendCustomFieldDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class NewPreference extends AppCompatActivity {
         //initialize database and DAO
         db = BondAppDatabase.getDatabase(getApplicationContext());
         userCustomFieldDAO = db.userCustomFieldDAO();
+        friendCustomFieldDAO = db.friendCustomFieldDAO();
 
         //activate new preference button
         createNewPreferenceButton.setOnClickListener(new View.OnClickListener() {
@@ -69,25 +74,38 @@ public class NewPreference extends AppCompatActivity {
                     return;
                 }
 
-                //get current user ID
-                int currentUserID = getSharedPreferences("my_app_prefs", MODE_PRIVATE).getInt("current_user_id", -1);
-                if (currentUserID == -1) {
-                    Toast.makeText(NewPreference.this, "No user logged in", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                //create new custom field
-                UserCustomField newField = new UserCustomField(0, currentUserID, title, description);
-
-                //insert new custom preference
-                BondAppDatabase.databaseWriteExecutor.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        userCustomFieldDAO.insertUserCustomField(newField);
-                        Toast.makeText(NewPreference.this, "Preference created: " + title, Toast.LENGTH_SHORT).show();
-                        finish();
+                //check if friend ID was provided
+                int friendID = getIntent().getIntExtra("friend_id", -1);
+                if (friendID != -1) {
+                    //insert custom field for friend
+                    FriendCustomField newField = new FriendCustomField(0, friendID, title, description);
+                    BondAppDatabase.databaseWriteExecutor.execute(() -> {
+                        friendCustomFieldDAO.insertFriendCustomField(newField);
+                        runOnUiThread(() -> {
+                            Toast.makeText(NewPreference.this, "Friend Preference Created: " + title, Toast.LENGTH_SHORT).show();
+                            finish();
+                        });
+                    });
+                } else {
+                    //get current user ID
+                    int currentUserID = getSharedPreferences("my_app_prefs", MODE_PRIVATE).getInt("current_user_id", -1);
+                    if (currentUserID == -1) {
+                        Toast.makeText(NewPreference.this, "No user logged in", Toast.LENGTH_SHORT).show();
+                        return;
                     }
-                });
+
+                    //create new custom field
+                    UserCustomField newField = new UserCustomField(0, currentUserID, title, description);
+
+                    //insert new custom preference
+                    BondAppDatabase.databaseWriteExecutor.execute(() -> {
+                        userCustomFieldDAO.insertUserCustomField(newField);
+                        runOnUiThread(() -> {
+                            Toast.makeText(NewPreference.this, "Preference Created: " + title, Toast.LENGTH_SHORT).show();
+                            finish();
+                        });
+                    });
+                }
             }
         });
     }

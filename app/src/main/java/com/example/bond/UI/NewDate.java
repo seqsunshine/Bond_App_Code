@@ -15,8 +15,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.bond.DAO.FriendCustomFieldDAO;
 import com.example.bond.DAO.UserCustomFieldDAO;
 import com.example.bond.Database.BondAppDatabase;
+import com.example.bond.Entities.FriendCustomField;
 import com.example.bond.Entities.UserCustomField;
 import com.example.bond.R;
 
@@ -28,6 +30,7 @@ public class NewDate extends AppCompatActivity {
 
     private BondAppDatabase db;
     private UserCustomFieldDAO userCustomFieldDAO;
+    private FriendCustomFieldDAO friendCustomFieldDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,7 @@ public class NewDate extends AppCompatActivity {
         //initialize database and dao
         db = BondAppDatabase.getDatabase(getApplicationContext());
         userCustomFieldDAO = db.userCustomFieldDAO();
+        friendCustomFieldDAO = db.friendCustomFieldDAO();
 
         //activate create date button
         createNewDateButton.setOnClickListener(new View.OnClickListener(){
@@ -68,26 +72,38 @@ public class NewDate extends AppCompatActivity {
                     Toast.makeText(NewDate.this,"Please enter both title and date", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
-                //get current user's ID
-                SharedPreferences prefs = getSharedPreferences("my_app_prefs", MODE_PRIVATE);
-                int currentUserID = prefs.getInt("current_user_id", -1);
-                if (currentUserID == -1) {
-                    Toast.makeText(NewDate.this, "No user logged in", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                //create a new user custom field object
-                UserCustomField newDateField = new UserCustomField(0, currentUserID, title, date);
-
-                //insert the date
-                BondAppDatabase.databaseWriteExecutor.execute(() -> {
-                    userCustomFieldDAO.insertUserCustomField(newDateField);
-                    runOnUiThread(() -> {
-                        Toast.makeText(NewDate.this, "Date Created: " + title + " on " + date, Toast.LENGTH_SHORT).show();
-                        finish();
+                //check if friend id was provided
+                int friendID = getIntent().getIntExtra("friend_id", -1);
+                if (friendID != -1) {
+                    FriendCustomField newDateField = new FriendCustomField(0, friendID, title, date);
+                    BondAppDatabase.databaseWriteExecutor.execute(() -> {
+                        friendCustomFieldDAO.insertFriendCustomField(newDateField);
+                        runOnUiThread(() -> {
+                            Toast.makeText(NewDate.this, "Date Created for Friend: " + title + " on " + date, Toast.LENGTH_SHORT).show();
+                            finish();
+                        });
                     });
-                });
+                } else {
+                    //get current user's ID
+                    SharedPreferences prefs = getSharedPreferences("my_app_prefs", MODE_PRIVATE);
+                    int currentUserID = prefs.getInt("current_user_id", -1);
+                    if (currentUserID == -1) {
+                        Toast.makeText(NewDate.this, "No user logged in", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    //create a new user custom field object
+                    UserCustomField newDateField = new UserCustomField(0, currentUserID, title, date);
+
+                    //insert the date
+                    BondAppDatabase.databaseWriteExecutor.execute(() -> {
+                        userCustomFieldDAO.insertUserCustomField(newDateField);
+                        runOnUiThread(() -> {
+                            Toast.makeText(NewDate.this, "Date Created: " + title + " on " + date, Toast.LENGTH_SHORT).show();
+                            finish();
+                        });
+                    });
+                }
             }
         });
     }

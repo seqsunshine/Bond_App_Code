@@ -23,4 +23,7 @@ public interface FriendCustomFieldDAO {
 
     @Query("SELECT * FROM friend_custom_field WHERE friendOwnerID = :friendID")
     List<FriendCustomField> getCustomFieldsForFriend(int friendID);
+
+    @Query("DELETE FROM friend_custom_field WHERE fieldName = :name AND friendOwnerID = :friendID")
+    void deleteCustomFieldByNameAndFriendID(String name, int friendID);
 }

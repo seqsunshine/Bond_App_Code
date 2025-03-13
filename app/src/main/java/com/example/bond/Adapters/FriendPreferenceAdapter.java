@@ -18,10 +18,13 @@ public class FriendPreferenceAdapter extends RecyclerView.Adapter<FriendPreferen
 
     private Context context;
     private List<FriendPreference> friendPreferenceList;
+    private OnFriendPreferenceClickListener listener;
 
-    public FriendPreferenceAdapter(Context context, List<FriendPreference> friendPreferenceList) {
+    public FriendPreferenceAdapter(Context context, List<FriendPreference> friendPreferenceList, OnFriendPreferenceClickListener listener) {
         this.context = context;
         this.friendPreferenceList = friendPreferenceList;
+        this.listener = listener;
+
     }
 
     @NonNull
@@ -37,6 +40,13 @@ public class FriendPreferenceAdapter extends RecyclerView.Adapter<FriendPreferen
 
         holder.preferenceNameTextView.setText(currentPreference.getName());
         holder.preferenceDescriptionTextView.setText(currentPreference.getDescription());
+
+        holder.itemView.setOnClickListener(v -> {
+            int pos = holder.getAdapterPosition();
+            if (pos != RecyclerView.NO_POSITION && listener != null) {
+                listener.onFriendPreferenceClick(pos, friendPreferenceList.get(pos));
+            }
+        });
     }
 
     @Override
@@ -54,6 +64,10 @@ public class FriendPreferenceAdapter extends RecyclerView.Adapter<FriendPreferen
             preferenceNameTextView = itemView.findViewById(R.id.friend_preference_name_text_view);
             preferenceDescriptionTextView = itemView.findViewById(R.id.friend_preference_description_text_view);
         }
+    }
+
+    public interface OnFriendPreferenceClickListener {
+        void onFriendPreferenceClick(int position, FriendPreference friendPreference);
     }
 
     public void updateFriendPreferenceList(List<FriendPreference> newList) {

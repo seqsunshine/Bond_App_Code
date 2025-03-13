@@ -27,7 +27,7 @@ import java.util.concurrent.Executors;
 
 @Database(entities = {User.class, Friend.class, Occasion.class, UserCustomField.class,
         FriendCustomField.class, OccasionFriendCrossRef.class},
-        views ={FriendWithCustomField.class}, version = 2, exportSchema = false)
+        views ={FriendWithCustomField.class}, version = 4, exportSchema = false)
 public abstract class BondAppDatabase extends RoomDatabase{
     public abstract UserDAO userDAO();
     public abstract FriendDAO friendDAO();

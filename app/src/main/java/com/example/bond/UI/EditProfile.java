@@ -232,9 +232,7 @@ public class EditProfile extends AppCompatActivity {
                     pref.setDescription(updatedDescription);
                     preferenceAdapter.notifyItemChanged(position);
                     //update corresponding field in currentUser
-                    if (pref.getName().contains("Name")) {
-                        currentUser.setName(updatedDescription);
-                    } else if (pref.getName().contains("Birthday")) {
+                    if (pref.getName().contains("Birthday")) {
                         currentUser.setBirthday(updatedDescription);
                     } else if (pref.getName().contains("Favorite Color")) {
                         currentUser.setFavoriteColor(updatedDescription);
@@ -254,6 +252,8 @@ public class EditProfile extends AppCompatActivity {
                         currentUser.setPartnerName(updatedDescription);
                     } else if (pref.getName().contains("Interests")) {
                         currentUser.setInterests(updatedDescription);
+                    } else if (pref.getName().contains("Name")) {
+                        currentUser.setName(updatedDescription);
                     }
 
                     BondAppDatabase.databaseWriteExecutor.execute(() -> {

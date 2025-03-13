@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bond.Entities.Friend;
+import com.example.bond.Entities.User;
 import com.example.bond.R;
 
 import java.util.List;
@@ -17,9 +18,9 @@ import java.util.List;
 public class OccasionFriendAdapter extends RecyclerView.Adapter<OccasionFriendAdapter.OccasionFriendViewHolder> {
 
     private Context context;
-    private List<Friend> friendList;
+    private List<User> friendList;
 
-    public OccasionFriendAdapter(Context context, List<Friend> friendList){
+    public OccasionFriendAdapter(Context context, List<User> friendList){
         this.context = context;
         this.friendList = friendList;
     }
@@ -33,8 +34,8 @@ public class OccasionFriendAdapter extends RecyclerView.Adapter<OccasionFriendAd
 
     @Override
     public void onBindViewHolder(@NonNull OccasionFriendViewHolder holder, int position) {
-        Friend currentFriend = friendList.get(position);
-        holder.friendNameTextView.setText(currentFriend.getFriendName());
+        User currentFriend = friendList.get(position);
+        holder.friendNameTextView.setText(currentFriend.getUserName());
     }
 
     @Override
@@ -51,7 +52,7 @@ public class OccasionFriendAdapter extends RecyclerView.Adapter<OccasionFriendAd
         }
     }
 
-    public void updateFriendList(List<Friend> newList) {
+    public void updateFriendList(List<User> newList) {
         this.friendList = newList;
         notifyDataSetChanged();
     }

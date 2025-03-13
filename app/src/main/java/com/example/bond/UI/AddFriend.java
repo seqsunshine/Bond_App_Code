@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,11 +14,13 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bond.Adapters.FriendSearchAdapter;
+import com.example.bond.Adapters.UserSearchAdapter;
+import com.example.bond.DAO.FriendDAO;
+import com.example.bond.DAO.UserDAO;
+import com.example.bond.Database.BondAppDatabase;
 import com.example.bond.Entities.Friend;
+import com.example.bond.Entities.User;
 import com.example.bond.R;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +29,13 @@ public class AddFriend extends AppCompatActivity {
 
     private RecyclerView searchFriendsRecycler;
     private EditText friendsSearchEditText;
-    private TextView searchForFriendsText;
-    private TextView friendsSearchText;
 
-    private FriendSearchAdapter friendSearchAdapter;
-    private List<Friend> friendList;
-    private List<Friend> filteredFriendList;
+    private List<User> filteredUserList = new ArrayList<>();
+    private UserSearchAdapter userSearchAdapter;
+
+    private UserDAO userDAO;
+    private FriendDAO friendDAO;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,21 +53,24 @@ public class AddFriend extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        searchForFriendsText = findViewById(R.id.search_for_friends_text);
-        friendsSearchText = findViewById(R.id.friends_search_text);
+        //connect xml components
         friendsSearchEditText = findViewById(R.id.friends_search_edit_text);
         searchFriendsRecycler = findViewById(R.id.search_friends_recycler);
 
         //set up recycler
         searchFriendsRecycler.setLayoutManager(new LinearLayoutManager(this));
 
-        //initialize friend list
-        friendList = new ArrayList<>();
-        //ADD LOGIC TO IMPORT EXISTING FRIENDS HERE not done!!!!!
+        //load from database
+        BondAppDatabase db = BondAppDatabase.getDatabase(getApplicationContext());
+        friendDAO = db.friendDAO();
+        userDAO = db.userDAO();
 
         //set up adapter
-        friendSearchAdapter = new FriendSearchAdapter(this, filteredFriendList);
-        searchFriendsRecycler.setAdapter(friendSearchAdapter);
+        userSearchAdapter = new UserSearchAdapter(this, filteredUserList, selectedUser -> {
+           addFriend(selectedUser);
+        });
+
+        searchFriendsRecycler.setAdapter(userSearchAdapter);
 
         //add text watcher for search bar
         friendsSearchEditText.addTextChangedListener(new TextWatcher() {
@@ -88,17 +94,35 @@ public class AddFriend extends AppCompatActivity {
     //filters friends based on input
 
     private void filterFriends(String query) {
-        filteredFriendList.clear();
-        if(query.isEmpty()) {
-            filteredFriendList.addAll(friendList);
+        if (query.isEmpty()) {
+            filteredUserList.clear();
+            userSearchAdapter.notifyDataSetChanged();
+            return;
         }
-        else {
-            for (Friend friend : friendList) {
-                if (friend.getFriendUserName().toLowerCase().contains(query.toLowerCase())) {
-                    filteredFriendList.add(friend);
-                }
-            }
+
+        BondAppDatabase.databaseWriteExecutor.execute(() -> {
+            List<User> results = userDAO.searchUsers(query);
+            runOnUiThread(() -> {
+                filteredUserList.clear();
+                filteredUserList.addAll(results);
+                userSearchAdapter.notifyDataSetChanged();
+            });
+        });
+    }
+
+    private void addFriend(User selectedUser) {
+        int currentUserID = getSharedPreferences("my_app_prefs", MODE_PRIVATE).getInt("current_user_id", -1);
+        if (currentUserID == -1) {
+            Toast.makeText(this, "Added " + selectedUser.getUserName() + " as a friend!", Toast.LENGTH_SHORT).show();
+            return;
         }
-        friendSearchAdapter.notifyDataSetChanged();
+
+        BondAppDatabase.databaseWriteExecutor.execute(() -> {
+            Friend newFriendRow = new Friend(0, currentUserID, selectedUser.getUserID());
+            friendDAO.insertFriend(newFriendRow);
+            runOnUiThread(() -> {
+                Toast.makeText(this, "Added " + selectedUser.getUserName() + " as a friend!", Toast.LENGTH_SHORT).show();
+            });
+        });
     }
 }

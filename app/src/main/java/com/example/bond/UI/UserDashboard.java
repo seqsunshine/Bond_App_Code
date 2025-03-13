@@ -86,15 +86,6 @@ public class UserDashboard extends AppCompatActivity {
             }
         });
 
-        //activates create friend button
-        createFriendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(UserDashboard.this, CreateFriend.class);
-                startActivity(intent);
-            }
-        });
-
         //activates my occasions button
         myOccasionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
