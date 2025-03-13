@@ -36,7 +36,6 @@ public class OccasionAdapter extends RecyclerView.Adapter<OccasionAdapter.Occasi
         Occasion currentOccasion = occasionList.get(position);
         holder.titleTextView.setText(currentOccasion.getOccasionTitle());
         holder.dateTextView.setText(currentOccasion.getOccasionDate());
-        holder.descriptionTextView.setText(currentOccasion.getDescription());
     }
 
     @Override
@@ -47,13 +46,11 @@ public class OccasionAdapter extends RecyclerView.Adapter<OccasionAdapter.Occasi
     public static class OccasionViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView;
         TextView dateTextView;
-        TextView descriptionTextView;
 
         public OccasionViewHolder(@NonNull View itemView) {
             super(itemView);
-            titleTextView = itemView.findViewById(R.id.occasion_title_text);
+            titleTextView = itemView.findViewById(R.id.occasion_title_text_view);
             dateTextView = itemView.findViewById(R.id.occasion_date_text_view);
-            descriptionTextView = itemView.findViewById(R.id.occasion_description_text);
         }
     }
 

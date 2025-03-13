@@ -30,4 +30,7 @@ public interface OccasionDAO {
     @Transaction
     @Query("SELECT * FROM occasion WHERE occasionID = :occasionID")
     OccasionWithFriends getOccasionWithFriends(int occasionID);
+
+    @Query("SELECT * FROM occasion WHERE ownerUserID = :ownerID ORDER BY dateCreated DESC")
+    List<Occasion> getOccasionsByOwner(int ownerID);
 }

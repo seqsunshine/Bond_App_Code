@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bond.Adapters.OccasionAdapter;
+import com.example.bond.DAO.OccasionDAO;
+import com.example.bond.Database.BondAppDatabase;
 import com.example.bond.Entities.Occasion;
 import com.example.bond.R;
 
@@ -22,6 +24,10 @@ public class OccasionPage extends AppCompatActivity {
     private RecyclerView occasionsRecycler;
     private OccasionAdapter occasionAdapter;
     private List<Occasion> occasionList;
+    private OccasionDAO occasionDAO;
+
+    BondAppDatabase db;
+    private int currentUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +49,36 @@ public class OccasionPage extends AppCompatActivity {
         occasionsRecycler = findViewById(R.id.my_occasion_recycler);
         occasionsRecycler.setLayoutManager(new LinearLayoutManager(this));
 
-        //initialize occasion list
-        occasionList = new ArrayList<>();
-        //need to add logic to import occasion data from database NOT DONE
-
         //initialize adapter
+        occasionList = new ArrayList<>();
         occasionAdapter = new OccasionAdapter(this, occasionList);
         occasionsRecycler.setAdapter(occasionAdapter);
+
+        //initialize database and DAO
+        db = BondAppDatabase.getDatabase(this);
+        occasionDAO = db.occasionDAO();
+
+        //get current user id
+        currentUserID = getSharedPreferences("my_app_prefs", MODE_PRIVATE).getInt("current_user_id", -1);
+
+        //load occasions for current user
+        loadOccasions();
+    }
+
+    private void loadOccasions() {
+        BondAppDatabase.databaseWriteExecutor.execute(() -> {
+            List<Occasion> results = occasionDAO.getOccasionsByOwner(currentUserID);
+            runOnUiThread(() -> {
+                occasionList.clear();
+                occasionList.addAll(results);
+                occasionAdapter.notifyDataSetChanged();
+            });
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadOccasions();
     }
 }

@@ -24,15 +24,4 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@id/occasion_title_text_view"/>
 
-    <TextView
-        android:id="@+id/occasion_description_text_view"
-        android:layout_width="133dp"
-        android:layout_height="wrap_content"
-        android:text="Occasion Description"
-        android:textSize="18sp"
-        android:fontFamily="@font/bright_demo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/occasion_date_text_view"/>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

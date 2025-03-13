@@ -25,30 +25,30 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/occasion_details_guest_recycler"
         android:layout_width="324dp"
-        android:layout_height="97dp"
+        android:layout_height="120dp"
         android:backgroundTint="#222222"
         android:fontFamily="@font/bright_demo"
         android:textColor="#F5F3EF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.321"
+        app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.706" />
+        app:layout_constraintVertical_bias="0.657" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/occasion_details_preferences_recycler"
-        android:layout_width="324dp"
-        android:layout_height="97dp"
+        android:layout_width="332dp"
+        android:layout_height="133dp"
         android:backgroundTint="#222222"
         android:fontFamily="@font/bright_demo"
         android:textColor="#F5F3EF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.321"
+        app:layout_constraintHorizontal_bias="0.354"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.906" />
+        app:layout_constraintVertical_bias="0.923" />
 
     <EditText
         android:id="@+id/occasion_details_date_created_edit_text"
@@ -124,10 +124,10 @@
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.116"
+        app:layout_constraintHorizontal_bias="0.094"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.777" />
+        app:layout_constraintVertical_bias="0.744" />
 
     <TextView
         android:id="@+id/occasion_details_guest_list_text"
@@ -138,10 +138,10 @@
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.088"
+        app:layout_constraintHorizontal_bias="0.114"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.596" />
+        app:layout_constraintVertical_bias="0.53" />
 
     <TextView
         android:id="@+id/occasion_details_title_text"
