@@ -3,6 +3,7 @@ package com.example.bond.Entities;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -10,14 +11,14 @@ import androidx.room.PrimaryKey;
         foreignKeys = @ForeignKey(
                 entity = User.class,
                 parentColumns = "userID",
-                childColumns = "userID",
+                childColumns = "ownerUserID",
                 onDelete = ForeignKey.CASCADE
-        ),
-        indices = {@Index("userID")}
-)
+        ))
 public class Occasion {
     @PrimaryKey(autoGenerate = true)
     private int occasionID;
+
+    private int ownerUserID;
 
     @NonNull
     private String occasionTitle;
@@ -26,15 +27,23 @@ public class Occasion {
     private String occasionLocation;
     private String dateCreated;
 
+    private String friendPreferences;
+    private String friendIDs;
+
     private int userID;
 
-    public Occasion(int occasionID, @NonNull String occasionTitle, String description, String occasionDate, String occasionLocation, String dateCreated, int userID) {
+    public Occasion(int occasionID, int ownerUserID, @NonNull String occasionTitle,
+                    String description, String occasionDate, String occasionLocation,
+                    String dateCreated, String friendPreferences, String friendIDs, int userID) {
         this.occasionID = occasionID;
+        this.ownerUserID = ownerUserID;
         this.occasionTitle = occasionTitle;
         this.description = description;
         this.occasionDate = occasionDate;
         this.occasionLocation = occasionLocation;
         this.dateCreated = dateCreated;
+        this.friendPreferences = friendPreferences;
+        this.friendIDs = friendIDs;
         this.userID = userID;
     }
 
@@ -44,6 +53,14 @@ public class Occasion {
 
     public void setOccasionID(int occasionID) {
         this.occasionID = occasionID;
+    }
+
+    public int getOwnerUserID() {
+        return ownerUserID;
+    }
+
+    public void setOwnerUserID(int ownerUserID) {
+        this.ownerUserID = ownerUserID;
     }
 
     @NonNull
@@ -79,12 +96,28 @@ public class Occasion {
         this.occasionLocation = occasionLocation;
     }
 
-    public String getDateCreated(){
+    public String getDateCreated() {
         return dateCreated;
     }
 
     public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public String getFriendPreferences() {
+        return friendPreferences;
+    }
+
+    public void setFriendPreferences(String friendPreferences) {
+        this.friendPreferences = friendPreferences;
+    }
+
+    public String getFriendIDs() {
+        return friendIDs;
+    }
+
+    public void setFriendIDs(String friendIDs) {
+        this.friendIDs = friendIDs;
     }
 
     public int getUserID() {
@@ -93,5 +126,11 @@ public class Occasion {
 
     public void setUserID(int userID) {
         this.userID = userID;
+    }
+
+    @Ignore
+    public Occasion(int occasionID, int ownerUserID, @NonNull String occasionTitle, String description,
+                    String occasionDate, String occasionLocation, String dateCreated, int userID) {
+        this(occasionID, ownerUserID, occasionTitle,description, occasionDate, occasionLocation, dateCreated, null, null, userID);
     }
 }

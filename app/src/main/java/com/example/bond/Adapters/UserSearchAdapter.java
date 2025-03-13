@@ -19,13 +19,16 @@ import com.example.bond.Entities.Friend;
 import com.example.bond.Entities.User;
 import com.example.bond.R;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.UserViewHolder> {
 
     private final Context context;
     private final List<User> userList;
     private final OnUserClickListener clickListener;
+    private Set<String> addedUserNames = new HashSet<>();
 
     public interface OnUserClickListener {
         void onUserClick(User user);
@@ -48,11 +51,22 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.Us
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User user = userList.get(position);
         holder.userNameTextView.setText(user.getUserName());
+
+        if (addedUserNames.contains(user.getUserName())) {
+            holder.addButton.setText("Added");
+            holder.addButton.setEnabled(false);
+        } else {
+            holder.addButton.setText("Add");
+            holder.addButton.setEnabled(true);
+        }
+
         holder.addButton.setOnClickListener(v -> {
             if (clickListener != null) {
                 clickListener.onUserClick(user);
-                Toast.makeText(context, "Friend added", Toast.LENGTH_SHORT).show();
             }
+
+            addedUserNames.add(user.getUserName());
+            notifyItemChanged(position);
         });
     }
 

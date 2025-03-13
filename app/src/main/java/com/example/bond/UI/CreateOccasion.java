@@ -262,7 +262,36 @@ public class CreateOccasion extends AppCompatActivity {
             return;
         }
 
-        Occasion newOccasion = new Occasion(0, title, date, location, description, null, 0);
+        StringBuilder friendIDsBuilder = new StringBuilder();
+        for (User friend : selectedFriend) {
+            friendIDsBuilder.append(friend.getUserID()).append(",");
+        }
+        String friendIDs = "";
+        if (friendIDsBuilder.length() > 0) {
+            friendIDs = friendIDsBuilder.substring(0, friendIDsBuilder.length() - 1);
+        }
+
+        StringBuilder preferenceTitlesBuilder = new StringBuilder();
+        for (Preference preference : selectedPreference) {
+            preferenceTitlesBuilder.append(preference.getName()).append(",");
+        }
+        String preferenceTitles = "";
+        if (preferenceTitlesBuilder.length() > 0) {
+            preferenceTitles = preferenceTitlesBuilder.substring(0, preferenceTitlesBuilder.length() - 1);
+        }
+
+        Occasion newOccasion = new Occasion(
+                0,
+                currentUserID,
+                title,
+                description,
+                date,
+                location,
+                getCurrentDate(),
+                preferenceTitles,
+                friendIDs,
+                currentUserID
+        );
 
         BondAppDatabase.databaseWriteExecutor.execute(() -> {
             long occasionID = db.occasionDAO().insertOccasion(newOccasion);
@@ -271,5 +300,10 @@ public class CreateOccasion extends AppCompatActivity {
                 finish();
             });
         });
+    }
+
+    private String getCurrentDate() {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
+        return sdf.format(new java.util.Date());
     }
 }

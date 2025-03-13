@@ -23,7 +23,9 @@ import com.example.bond.Entities.User;
 import com.example.bond.R;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AddFriend extends AppCompatActivity {
 
@@ -35,7 +37,6 @@ public class AddFriend extends AppCompatActivity {
 
     private UserDAO userDAO;
     private FriendDAO friendDAO;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
