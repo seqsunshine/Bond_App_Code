@@ -8,12 +8,8 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "occasion",
-        foreignKeys = @ForeignKey(
-                entity = User.class,
-                parentColumns = "userID",
-                childColumns = "ownerUserID",
-                onDelete = ForeignKey.CASCADE
-        ))
+foreignKeys = @ForeignKey(entity = User.class, parentColumns = "userID", childColumns = "ownerUserID", onDelete = ForeignKey.CASCADE),
+indices = {@Index(value = "ownerUserID")})
 public class Occasion {
     @PrimaryKey(autoGenerate = true)
     private int occasionID;

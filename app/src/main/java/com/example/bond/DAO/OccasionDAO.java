@@ -33,4 +33,7 @@ public interface OccasionDAO {
 
     @Query("SELECT * FROM occasion WHERE ownerUserID = :ownerID ORDER BY dateCreated DESC")
     List<Occasion> getOccasionsByOwner(int ownerID);
+
+    @Query("SELECT * FROM occasion WHERE occasionID = :occasionID")
+    Occasion getOccasionByID(int occasionID);
 }

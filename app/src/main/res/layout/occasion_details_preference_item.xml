@@ -16,12 +16,16 @@
 
     <TextView
         android:id="@+id/occasion_details_preference_description_text_view"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Preference Description"
         android:textSize="18sp"
         android:fontFamily="@font/bright_demo"
+        android:ellipsize="none"
+        android:singleLine="false"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/occasion_details_preference_title_text_view"/>
+        app:layout_constraintStart_toEndOf="@id/occasion_details_preference_title_text_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -67,4 +67,7 @@ public interface UserDAO {
             "WHERE userID = :userID AND interests LIKE '%' || :query || '%'"
     )
     List<Preference> searchUserPreferences(int userID, String query);
+
+    @Query("SELECT * FROM user WHERE userID IN (:ids)")
+    List<User> getUsersByIDs(List<Integer> ids);
 }

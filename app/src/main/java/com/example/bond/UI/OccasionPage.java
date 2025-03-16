@@ -1,5 +1,6 @@
 package com.example.bond.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -51,7 +52,11 @@ public class OccasionPage extends AppCompatActivity {
 
         //initialize adapter
         occasionList = new ArrayList<>();
-        occasionAdapter = new OccasionAdapter(this, occasionList);
+        occasionAdapter = new OccasionAdapter(this, occasionList, occasion -> {
+            Intent intent = new Intent(OccasionPage.this, OccasionDetails.class);
+            intent.putExtra("occasionID", occasion.getOccasionID());
+            startActivity(intent);
+        });
         occasionsRecycler.setAdapter(occasionAdapter);
 
         //initialize database and DAO

@@ -1,8 +1,10 @@
 package com.example.bond.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -261,6 +263,24 @@ public class CreateOccasion extends AppCompatActivity {
             Toast.makeText(this, "Please fill in all fields.", Toast.LENGTH_SHORT).show();
             return;
         }
+//
+//        StringBuilder friendIDsBuilder = new StringBuilder();
+//        for (User friend : selectedFriend) {
+//            friendIDsBuilder.append(friend.getUserID()).append(",");
+//        }
+//        String friendIDs = "";
+//        if (friendIDsBuilder.length() > 0) {
+//            friendIDs = friendIDsBuilder.substring(0, friendIDsBuilder.length() - 1);
+//        }
+//
+//        StringBuilder preferenceTitlesBuilder = new StringBuilder();
+//        for (Preference preference : selectedPreference) {
+//            preferenceTitlesBuilder.append(preference.getName()).append(",");
+//        }
+//        String preferenceTitles = "";
+//        if (preferenceTitlesBuilder.length() > 0) {
+//            preferenceTitles = preferenceTitlesBuilder.substring(0, preferenceTitlesBuilder.length() - 1);
+//        }
 
         StringBuilder friendIDsBuilder = new StringBuilder();
         for (User friend : selectedFriend) {
@@ -271,14 +291,28 @@ public class CreateOccasion extends AppCompatActivity {
             friendIDs = friendIDsBuilder.substring(0, friendIDsBuilder.length() - 1);
         }
 
-        StringBuilder preferenceTitlesBuilder = new StringBuilder();
-        for (Preference preference : selectedPreference) {
-            preferenceTitlesBuilder.append(preference.getName()).append(",");
+        StringBuilder prefBuilder = new StringBuilder();
+        for (Preference pref : selectedPreference) {
+            String category = pref.getName();
+            prefBuilder.append(category).append(": ");
+            for (User friend : selectedFriend) {
+                String friendValue = getFriendPreferenceForCategory(friend, category);
+                if (friendValue != null && !friendValue.isEmpty()) {
+                    prefBuilder.append(friend.getName())
+                            .append(" - ")
+                            .append(friendValue)
+                            .append(", ");
+                }
+            }
+            int length = prefBuilder.length();
+            if (length >= 2 && prefBuilder.substring(length - 2).equals(", ")) {
+                prefBuilder.setLength(length - 2);
+            }
+            prefBuilder.append("\n");
         }
-        String preferenceTitles = "";
-        if (preferenceTitlesBuilder.length() > 0) {
-            preferenceTitles = preferenceTitlesBuilder.substring(0, preferenceTitlesBuilder.length() - 1);
-        }
+
+        String preferencesString = prefBuilder.toString().trim();
+        String friendPreferencesCombined = friendIDs + "|" + preferencesString;
 
         Occasion newOccasion = new Occasion(
                 0,
@@ -288,22 +322,53 @@ public class CreateOccasion extends AppCompatActivity {
                 date,
                 location,
                 getCurrentDate(),
-                preferenceTitles,
+                friendPreferencesCombined,
                 friendIDs,
                 currentUserID
+
         );
 
         BondAppDatabase.databaseWriteExecutor.execute(() -> {
-            long occasionID = db.occasionDAO().insertOccasion(newOccasion);
+            long insertedID = db.occasionDAO().insertOccasion(newOccasion);
             runOnUiThread(() -> {
                 Toast.makeText(this, "Occasion created!", Toast.LENGTH_SHORT).show();
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("occasionID", insertedID);
+                setResult(RESULT_OK, resultIntent);
                 finish();
             });
         });
     }
 
+    private String getFriendPreferenceForCategory(User friend, String category) {
+        switch(category) {
+            case "Birthday":
+                return friend.getBirthday();
+            case "Favorite Color":
+                return friend.getFavoriteColor();
+            case "Allergies":
+                return friend.getAllergies();
+            case "Dietary Restrictions":
+                return friend.getDietaryRestrictions();
+            case "Favorite Food":
+                return friend.getFavoriteFood();
+            case "Hobbies":
+                return friend.getHobbies();
+            case "Current Job":
+                return friend.getCurrentJob();
+            case "Pet Name":
+                return friend.getPetName();
+            case "Partner Name":
+                return friend.getPartnerName();
+            case "Interests":
+                return friend.getInterests();
+            default:
+                return "";
+        }
+    }
+
     private String getCurrentDate() {
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MM-DD-YYYY", java.util.Locale.getDefault());
         return sdf.format(new java.util.Date());
     }
 }

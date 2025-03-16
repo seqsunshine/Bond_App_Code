@@ -18,10 +18,16 @@ public class OccasionAdapter extends RecyclerView.Adapter<OccasionAdapter.Occasi
 
     private Context context;
     private List<Occasion> occasionList;
+    private OnOccasionClickListener clickListener;
 
-    public OccasionAdapter(Context context, List<Occasion> occasionList) {
+    public interface OnOccasionClickListener {
+        void onOccasionClick(Occasion occasion);
+    }
+
+    public OccasionAdapter(Context context, List<Occasion> occasionList, OnOccasionClickListener clickListener) {
         this.context = context;
         this.occasionList = occasionList;
+        this.clickListener = clickListener;
     }
 
     @NonNull
@@ -36,6 +42,12 @@ public class OccasionAdapter extends RecyclerView.Adapter<OccasionAdapter.Occasi
         Occasion currentOccasion = occasionList.get(position);
         holder.titleTextView.setText(currentOccasion.getOccasionTitle());
         holder.dateTextView.setText(currentOccasion.getOccasionDate());
+
+        holder.itemView.setOnClickListener(v -> {
+            if (clickListener != null) {
+                clickListener.onOccasionClick(currentOccasion);
+            }
+        });
     }
 
     @Override
