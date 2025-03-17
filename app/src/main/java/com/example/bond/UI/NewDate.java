@@ -1,5 +1,6 @@
 package com.example.bond.UI;
 
+import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,6 +22,8 @@ import com.example.bond.Database.BondAppDatabase;
 import com.example.bond.Entities.FriendCustomField;
 import com.example.bond.Entities.UserCustomField;
 import com.example.bond.R;
+
+import java.util.Calendar;
 
 public class NewDate extends AppCompatActivity {
 
@@ -50,13 +53,17 @@ public class NewDate extends AppCompatActivity {
 
         //connect xml components
         dateTitleEditText = findViewById(R.id.create_new_date_title_edit_text);
-        dateEditText = findViewById(R.id.create_new_date_date_edit_text);
         createNewDateButton = findViewById(R.id.create_new_date_button);
+        dateEditText = findViewById(R.id.create_new_date_date_edit_text);
 
         //initialize database and dao
         db = BondAppDatabase.getDatabase(getApplicationContext());
         userCustomFieldDAO = db.userCustomFieldDAO();
         friendCustomFieldDAO = db.friendCustomFieldDAO();
+
+        //date picker
+        dateEditText.setFocusable(false);
+        dateEditText.setOnClickListener(v -> showDatePickerDialog());
 
         //activate create date button
         createNewDateButton.setOnClickListener(new View.OnClickListener(){
@@ -106,6 +113,26 @@ public class NewDate extends AppCompatActivity {
                 }
             }
         });
+    }
+    //date picker
+    private void showDatePickerDialog() {
+        //get current date as default
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String formattedDate = selectedMonth + 1 + "/" + selectedDay + "/" + selectedYear;
+                    dateEditText.setText(formattedDate);
+                },
+                year,
+                month,
+                day
+        );
+        datePickerDialog.show();
     }
 
     //add custom backwards navigation to EditProfile or CreateFriend

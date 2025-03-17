@@ -30,12 +30,9 @@ import java.util.List;
 
 public class EditProfile extends AppCompatActivity {
 
-    private ImageView editProfileLogo;
-    private ImageView profilePicture;
     private RecyclerView preferencesRecycler;
     private Button addPreferenceButton;
     private Button addDateButton;
-    private Button changePhotoButton;
     private TextView myPreferencesText;
 
     private List<Preference> preferenceList;
@@ -63,19 +60,10 @@ public class EditProfile extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        //commented out for now.. need to work on the logic for this navigation
-//        //set up custom backwards navigation from NewDate and NewPreference
-//        Intent intent = new Intent(EditProfile.this, NewDate.class);
-//        intent.putExtra("origin", "editProfile");
-//        startActivity(intent);
-
         //connect xml components to file
-        editProfileLogo = findViewById(R.id.edit_profile_logo);
-        profilePicture = findViewById(R.id.edit_page_profile_picture);
         preferencesRecycler = findViewById(R.id.my_preferences_recycler);
         addPreferenceButton = findViewById(R.id.add_preference_button);
         addDateButton = findViewById(R.id.add_date_button);
-        changePhotoButton = findViewById(R.id.change_photo_button);
         myPreferencesText = findViewById(R.id.my_preferences_text);
 
         //set up recycler view
@@ -113,14 +101,6 @@ public class EditProfile extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(EditProfile.this, NewDate.class);
                 startActivity(intent);
-            }
-        });
-
-        //activates change photo button
-        changePhotoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Need to create logic for image picker... tbd on how to do this
             }
         });
 

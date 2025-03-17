@@ -17,9 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.bond.DAO.FriendCustomFieldDAO;
 import com.example.bond.DAO.UserCustomFieldDAO;
 import com.example.bond.Database.BondAppDatabase;
-import com.example.bond.Entities.Friend;
 import com.example.bond.Entities.FriendCustomField;
-import com.example.bond.Entities.User;
 import com.example.bond.Entities.UserCustomField;
 import com.example.bond.R;
 

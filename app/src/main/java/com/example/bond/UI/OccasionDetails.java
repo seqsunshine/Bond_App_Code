@@ -1,8 +1,9 @@
 package com.example.bond.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,10 @@ public class OccasionDetails extends AppCompatActivity {
     private TextView occasionDetailsLocationTextView;
     private TextView occasionDetailsDescriptionTextView;
     private TextView occasionDetailsDateCreatedTextView;
+
+    //buttons
+    private Button editOccasionButton;
+    private Button deleteOccasionButton;
 
     //recycler views
     private RecyclerView occasionDetailsGuestRecycler;
@@ -87,6 +92,10 @@ public class OccasionDetails extends AppCompatActivity {
         occasionDetailsGuestRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         occasionDetailsPreferencesRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
+        //buttons
+        editOccasionButton = findViewById(R.id.edit_occasion_button);
+        deleteOccasionButton = findViewById(R.id.delete_occasion_button);
+
         //guest list
         friendsAttending = new ArrayList<>();
         //preferences
@@ -112,6 +121,24 @@ public class OccasionDetails extends AppCompatActivity {
         }
 
         loadOccasionDetails();
+
+        //activate edit occasion button
+        editOccasionButton.setOnClickListener(v -> {
+            Intent intent = new Intent(OccasionDetails.this, CreateOccasion.class);
+            intent.putExtra("occasionID", occasionID);
+            startActivity(intent);
+        });
+
+        //activate delete occasion button
+        deleteOccasionButton.setOnClickListener(v -> {
+            BondAppDatabase.databaseWriteExecutor.execute(() -> {
+                occasionDAO.deleteOccasionByID(occasionID);
+                runOnUiThread(() -> {
+                    Toast.makeText(OccasionDetails.this, "Occasion deleted", Toast.LENGTH_SHORT).show();
+                    finish();
+                });
+            });
+        });
     }
 
     private void loadOccasionDetails() {

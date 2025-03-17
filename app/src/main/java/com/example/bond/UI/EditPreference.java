@@ -1,9 +1,11 @@
 package com.example.bond.UI;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.bond.R;
 
-import org.w3c.dom.Text;
+import java.util.Calendar;
 
 public class EditPreference extends AppCompatActivity {
 
@@ -71,6 +73,11 @@ public class EditPreference extends AppCompatActivity {
             descriptionEditText.setText(currentDescription);
         }
 
+        //if birthday is selected, show a date picker dialogue
+        if (preferenceName.contains("Birthday")) {
+            showDatePickerDialog();
+        }
+
         //activate save button
         saveButton.setOnClickListener(v -> {
             String newDescription = descriptionEditText.getText().toString().trim();
@@ -95,5 +102,27 @@ public class EditPreference extends AppCompatActivity {
             setResult(RESULT_OK, resultIntent);
             finish();
         });
+    }
+
+    private void showDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                EditPreference.this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
+                        String formattedDate = (selectedMonth + 1) + "/" + selectedDay + "/" + selectedYear;
+                        descriptionEditText.setText(formattedDate);
+                    }
+                },
+                year,
+                month,
+                day
+        );
+        datePickerDialog.show();
     }
 }

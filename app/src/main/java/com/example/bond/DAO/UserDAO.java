@@ -70,4 +70,5 @@ public interface UserDAO {
 
     @Query("SELECT * FROM user WHERE userID IN (:ids)")
     List<User> getUsersByIDs(List<Integer> ids);
+
 }

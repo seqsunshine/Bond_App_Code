@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +24,7 @@ public class UserDashboard extends AppCompatActivity {
     private TextView dashboardUsersName;
     private Button editProfileButton;
     private Button addFriendsButton;
-    private Button createFriendButton;
+    private Button logoutButton;
     private Button myOccasionsButton;
     private Button myFriendsButton;
     private Button createOccasionButton;
@@ -54,7 +53,7 @@ public class UserDashboard extends AppCompatActivity {
         dashboardUsersName = findViewById(R.id.dashboard_users_name);
         editProfileButton = findViewById(R.id.dashboard_edit_profile_button);
         addFriendsButton = findViewById(R.id.dashboard_add_friends_button);
-        createFriendButton = findViewById(R.id.dashboard_create_friend_button);
+        logoutButton = findViewById(R.id.dashboard_logout_button);
         myOccasionsButton = findViewById(R.id.dashboard_my_occasions_button);
         myFriendsButton = findViewById(R.id.dashboard_my_friends_button);
         createOccasionButton = findViewById(R.id.dashboard_create_occasion_button);
@@ -65,8 +64,6 @@ public class UserDashboard extends AppCompatActivity {
 
         // load current user
         loadCurrentUser();
-
-        // ALSO!!!! need to add importing own profile picture stuff... tbd on how to do this
 
         //activates edit profile button
         editProfileButton.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +108,18 @@ public class UserDashboard extends AppCompatActivity {
                 Intent intent = new Intent(UserDashboard.this, CreateOccasion.class);
                 startActivity(intent);
             }
+        });
+
+        //activates logout button
+        logoutButton.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = getSharedPreferences("my_app_prefs", MODE_PRIVATE).edit();
+            editor.remove("current_user_id");
+            editor.apply();
+
+            Intent intent = new Intent(UserDashboard.this, HomeScreen.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         });
     }
 

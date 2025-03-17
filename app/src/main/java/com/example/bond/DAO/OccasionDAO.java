@@ -36,4 +36,8 @@ public interface OccasionDAO {
 
     @Query("SELECT * FROM occasion WHERE occasionID = :occasionID")
     Occasion getOccasionByID(int occasionID);
+
+    @Query("DELETE FROM occasion WHERE occasionID = :occasionID")
+    void deleteOccasionByID(int occasionID);
 }
+

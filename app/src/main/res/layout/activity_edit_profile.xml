@@ -20,18 +20,6 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/bond_v2_transparent" />
 
-    <ImageView
-        android:id="@+id/edit_page_profile_picture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.142"
-        tools:srcCompat="@tools:sample/avatars" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_preferences_recycler"
         android:layout_width="320dp"
@@ -41,10 +29,10 @@
         android:textColor="#F5F3EF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.406"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.807" />
+        app:layout_constraintVertical_bias="0.556" />
 
     <Button
         android:id="@+id/add_preference_button"
@@ -78,22 +66,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.976" />
 
-    <Button
-        android:id="@+id/change_photo_button"
-        android:layout_width="190dp"
-        android:layout_height="49dp"
-        android:backgroundTint="#222222"
-        android:fontFamily="@font/bright_demo"
-        android:text="Change Photo"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="#F5F3EF"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.279" />
-
     <TextView
         android:id="@+id/my_preferences_text"
         android:layout_width="wrap_content"
@@ -106,5 +78,5 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.346" />
+        app:layout_constraintVertical_bias="0.223" />
 </androidx.constraintlayout.widget.ConstraintLayout>

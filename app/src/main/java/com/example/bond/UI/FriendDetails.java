@@ -1,8 +1,8 @@
 package com.example.bond.UI;
 
 import android.os.Bundle;
-import android.telecom.Call;
-import android.widget.ImageView;
+import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bond.Adapters.FriendDetailsAdapter;
+import com.example.bond.DAO.FriendDAO;
 import com.example.bond.DAO.UserDAO;
 import com.example.bond.Database.BondAppDatabase;
 import com.example.bond.Entities.User;
@@ -30,10 +31,12 @@ public class FriendDetails extends AppCompatActivity {
 
     private BondAppDatabase db;
     private UserDAO userDAO;
+    private FriendDAO friendDAO;
 
     private RecyclerView friendDetailsRecycler;
     private FriendDetailsAdapter friendDetailsAdapter;
     private List<Detail> detailList;
+    private Button deleteFriendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,7 @@ public class FriendDetails extends AppCompatActivity {
 
         //connect xml components to file
         friendDetailsRecycler = findViewById(R.id.friend_details_recycler);
+        deleteFriendButton = findViewById(R.id.delete_friend_button);
 
         //set up recycler
         friendDetailsRecycler.setLayoutManager(new LinearLayoutManager(this));
@@ -65,6 +69,7 @@ public class FriendDetails extends AppCompatActivity {
         //initialize database and DAO
         db = BondAppDatabase.getDatabase(getApplicationContext());
         userDAO = db.userDAO();
+        friendDAO = db.friendDAO();
 
         friendUserID = getIntent().getIntExtra("friendUserID", -1);
         if (friendUserID == -1) {
@@ -74,6 +79,32 @@ public class FriendDetails extends AppCompatActivity {
         }
 
         loadFriendDetails(friendUserID);
+
+        //set up delete friend button
+        deleteFriendButton.setOnClickListener(v -> {
+            int currentUserID = getSharedPreferences("my_app_prefs", MODE_PRIVATE).getInt("current_user_id", -1);
+            Log.d("FriendDetails", "Current User ID: " + currentUserID);
+            if (currentUserID == -1) {
+                Toast.makeText(this, "Error: User not logged in.", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
+            BondAppDatabase.databaseWriteExecutor.execute(() -> {
+                try {
+                    friendDAO.deleteFriend(currentUserID, friendUserID);
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Friend deleted successfully.", Toast.LENGTH_SHORT).show();
+                        finish();
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Error: Failed to delete friend.", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            });
+        });
+
     }
 
     private void loadFriendDetails(final int friendUserID) {
@@ -108,4 +139,3 @@ public class FriendDetails extends AppCompatActivity {
         friendDetailsAdapter.notifyDataSetChanged();
     }
 }
-

@@ -1,10 +1,10 @@
 package com.example.bond.UI;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,13 +22,13 @@ import com.example.bond.Adapters.OccasionPreferenceAdapter;
 import com.example.bond.DAO.FriendDAO;
 import com.example.bond.DAO.UserDAO;
 import com.example.bond.Database.BondAppDatabase;
-import com.example.bond.Entities.Friend;
 import com.example.bond.Entities.Occasion;
 import com.example.bond.Entities.User;
 import com.example.bond.Models.Preference;
 import com.example.bond.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class CreateOccasion extends AppCompatActivity {
@@ -89,6 +89,8 @@ public class CreateOccasion extends AppCompatActivity {
         //occasion detail fields
         occasionTitleEditText = findViewById(R.id.occasion_title_edit_text);
         occasionDateEditText = findViewById(R.id.occasion_date_edit_text);
+        occasionDateEditText.setFocusable(false);
+        occasionDateEditText.setOnClickListener(v -> showDatePickerDialog());
         occasionLocationEditText = findViewById(R.id.occasion_location_edit_text);
         occasionDescriptionEditText = findViewById(R.id.occasion_description_edit_text);
 
@@ -263,24 +265,6 @@ public class CreateOccasion extends AppCompatActivity {
             Toast.makeText(this, "Please fill in all fields.", Toast.LENGTH_SHORT).show();
             return;
         }
-//
-//        StringBuilder friendIDsBuilder = new StringBuilder();
-//        for (User friend : selectedFriend) {
-//            friendIDsBuilder.append(friend.getUserID()).append(",");
-//        }
-//        String friendIDs = "";
-//        if (friendIDsBuilder.length() > 0) {
-//            friendIDs = friendIDsBuilder.substring(0, friendIDsBuilder.length() - 1);
-//        }
-//
-//        StringBuilder preferenceTitlesBuilder = new StringBuilder();
-//        for (Preference preference : selectedPreference) {
-//            preferenceTitlesBuilder.append(preference.getName()).append(",");
-//        }
-//        String preferenceTitles = "";
-//        if (preferenceTitlesBuilder.length() > 0) {
-//            preferenceTitles = preferenceTitlesBuilder.substring(0, preferenceTitlesBuilder.length() - 1);
-//        }
 
         StringBuilder friendIDsBuilder = new StringBuilder();
         for (User friend : selectedFriend) {
@@ -368,7 +352,26 @@ public class CreateOccasion extends AppCompatActivity {
     }
 
     private String getCurrentDate() {
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MM-DD-YYYY", java.util.Locale.getDefault());
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MM-dd-yyyy", java.util.Locale.getDefault());
         return sdf.format(new java.util.Date());
+    }
+
+    private void showDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String formattedDate = selectedMonth + 1 + "/" + selectedDay + "/" + selectedYear;
+                    occasionDateEditText.setText(formattedDate);
+                },
+                year,
+                month,
+                day
+        );
+        datePickerDialog.show();
     }
 }

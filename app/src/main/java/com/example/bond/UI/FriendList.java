@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bond.Adapters.FriendAdapter;
 import com.example.bond.DAO.FriendDAO;
 import com.example.bond.Database.BondAppDatabase;
-import com.example.bond.Entities.Friend;
 import com.example.bond.Entities.User;
 import com.example.bond.R;
 
